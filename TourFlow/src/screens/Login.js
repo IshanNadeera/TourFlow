@@ -14,20 +14,22 @@ const Login = ({ navigation }) => {
     return(
         <SafeAreaView style={styles.container}>
 
-            <View style={{flex:2.5, marginTop: 10}}>
+            <View style={{flex:1.7, marginTop: 10}}>
                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
                     <Text style = {{fontSize:50, fontWeight: 'bold', color: Colors.mainColor1, marginTop: 10, marginLeft: 10}}>Tour</Text>
                     <Text style = {{fontSize:50, fontWeight: 'bold', color: Colors.mainColor2, marginTop: 10, marginLeft: 10}}>Flow</Text>
                 </View>
                 <Lottie style={{width: '100%'}} source={require('../../img/login.json')} autoPlay loop />
-                <Text style = {{fontSize:30, fontWeight: 'bold', color: Colors.fontColor1, marginLeft: 10}}>Welcome Back!</Text>
             </View>
 
             <View style={styles.BottomView}>
                 <View style={styles.formContainer}>
+
+                    <Text style = {{alignSelf: 'flex-start',fontSize:30, fontWeight: 'bold', color: Colors.fontColor1, marginLeft: 10}}>Welcome Back!</Text>
+
                     <Text style={styles.textLabel}>Username</Text>
                     <TextInput
-                        placeholder='Enter your email'
+                        placeholder='Enter your username'
                         style={styles.input}
                     />
 
@@ -41,6 +43,15 @@ const Login = ({ navigation }) => {
                         <TouchableOpacity style={styles.button} onPress={onPressLogin}>
                             <Text style={{color: '#fff', fontSize: 16}}>Login</Text>
                         </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.bottomContent}>
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={{fontSize: 16}}>Don't have an account?</Text>
+                            <TouchableOpacity style={{marginLeft: 5}}>
+                                <Text style={{color: Colors.mainColor2, fontSize: 16}}>Register</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
                 </View>
@@ -63,6 +74,7 @@ const styles = StyleSheet.create({
     BottomView: {
         flex: 3,
         backgroundColor: Colors.mainColor1,
+        justifyContent: 'center',
     },
 
     formContainer: {
@@ -81,7 +93,8 @@ const styles = StyleSheet.create({
         color: Colors.mainColor2,
         fontWeight: 'bold',
         fontSize: 18,
-        marginTop: 15
+        marginTop: 15,
+        marginLeft: '4%'
     },
 
     input: {
@@ -110,5 +123,10 @@ const styles = StyleSheet.create({
         alignItems : 'center',
         justifyContent : 'center'
     },
+
+    bottomContent: {
+        alignSelf : 'center',
+        marginBottom: 20
+    }
 
 });
