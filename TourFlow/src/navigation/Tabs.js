@@ -15,12 +15,12 @@ const Tabs = ({navigation}) => {
             tabBarShowLabel: false,
             tabBarStyle: {
                 elevation:10,
-                borderRadius: 15,
+                // borderRadius: 15,
                 position: 'absolute',
-                height: 70,
-                left: 10,
-                right: 10,
-                bottom: 10,
+                height: 60,
+                left: 0,
+                right: 0,
+                bottom: 0,
                 backgroundColor: Colors.mainColor2
             }
         }}>
@@ -35,9 +35,9 @@ const Tabs = ({navigation}) => {
                                     style={{
                                         width: 30,
                                         height: 30,
-                                        tintColor: focused ? Colors.mainColor3 : Colors.fontColor2
+                                        tintColor: focused ? Colors.fontColor1 : Colors.fontColor2
                                     }} />
-                                <Text style={{color : focused ? Colors.mainColor3 : Colors.fontColor2 }}>Locations</Text>
+                                <Text style={{color : focused ? Colors.fontColor1 : Colors.fontColor2 }}>Locations</Text>
                             </View>
                         )
                     },
@@ -57,9 +57,9 @@ const Tabs = ({navigation}) => {
                                     style={{
                                         width: 25,
                                         height: 25,
-                                        tintColor: focused ? Colors.mainColor3 : Colors.fontColor2
+                                        tintColor: focused ? Colors.fontColor1 : Colors.fontColor2
                                     }} />
-                                <Text style={{color : focused ? Colors.mainColor3 : Colors.fontColor2 }}>Restaurants</Text>
+                                <Text style={{color : focused ? Colors.fontColor1 : Colors.fontColor2 }}>Restaurants</Text>
                             </View>
                         )
                     },
@@ -79,9 +79,9 @@ const Tabs = ({navigation}) => {
                                     style={{
                                         width: 25,
                                         height: 25,
-                                        tintColor: focused ? Colors.mainColor3 : Colors.fontColor2
+                                        tintColor: focused ? Colors.fontColor1 : Colors.fontColor2
                                     }} />
-                                <Text style={{color : focused ? Colors.mainColor3 : Colors.fontColor2 }}>Transport</Text>
+                                <Text style={{color : focused ? Colors.fontColor1 : Colors.fontColor2 }}>Transport</Text>
                             </View>
                         )
                     },
@@ -101,9 +101,9 @@ const Tabs = ({navigation}) => {
                                     style={{
                                         width: 25,
                                         height: 25,
-                                        tintColor: focused ? Colors.mainColor3 : Colors.fontColor2
+                                        tintColor: focused ? Colors.fontColor1 : Colors.fontColor2
                                     }} />
-                                <Text style={{color : focused ? Colors.mainColor3 : Colors.fontColor2 }}>Guidance</Text>
+                                <Text style={{color : focused ? Colors.fontColor1 : Colors.fontColor2 }}>Guidance</Text>
                             </View>
                         )
                     },
