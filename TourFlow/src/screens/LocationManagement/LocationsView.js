@@ -51,8 +51,12 @@ const Location = ({navigation}) => {
         }
     ];
 
+    const onPressCard = (id, name, city, url) => {
+        navigation.navigate('LocationSingle', {id: id, name: name, city: city, url:url});
+    }
+
     const LocationItem = ({ id, name, city, url}) => (
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={ () => { onPressCard(id, name, city, url) }}>
             <View style={styles.container1}>
                 <Image style={styles.image} src={url} />
                 <View style={styles.textContainer}>
