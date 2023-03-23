@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "466249476799",
+    "project_id": "tourflow-5b4bd",
+    "storage_bucket": "tourflow-5b4bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466249476799:android:93b293ddd81743968b340a",
+        "android_client_info": {
+          "package_name": "com.TourFlow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466249476799-595iib5rvduk14rcvnsepc01vg6ntr67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrceIf8bzW-P6nG3eODJUFlt4VAOaFuRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466249476799-595iib5rvduk14rcvnsepc01vg6ntr67.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466249476799:android:084584ec05a3a2e08b340a",
+        "android_client_info": {
+          "package_name": "com.tourflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466249476799-595iib5rvduk14rcvnsepc01vg6ntr67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrceIf8bzW-P6nG3eODJUFlt4VAOaFuRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466249476799-595iib5rvduk14rcvnsepc01vg6ntr67.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
