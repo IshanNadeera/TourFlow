@@ -1,11 +1,13 @@
 import React, {useState, createRef, useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from "react-native";
+import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from "react-native";
 import Colors from "../utils/Colors";
 import SweetAlert from 'react-native-sweet-alert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Lottie from 'lottie-react-native';
 
 const Login = ({ navigation }) => {
+
+    const image = require("../../img/bg3.jpeg");
 
     const onPressLogin = () => {
         navigation.navigate('Initial');
@@ -23,38 +25,42 @@ const Login = ({ navigation }) => {
             </View>
 
             <View style={styles.BottomView}>
-                <View style={styles.formContainer}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.imageBg}>
 
-                    <Text style = {{alignSelf: 'flex-start',fontSize:30, fontWeight: 'bold', color: Colors.fontColor1, marginLeft: 10}}>Welcome Back!</Text>
+                    <View style={styles.formContainer}>
 
-                    <Text style={styles.textLabel}>Username</Text>
-                    <TextInput
-                        placeholder='Enter your username'
-                        style={styles.input}
-                    />
+                        <Text style = {{alignSelf: 'flex-start',fontSize:30, fontWeight: 'bold', color: Colors.fontColor1, marginLeft: 10}}>Welcome Back!</Text>
 
-                    <Text style={styles.textLabel}>Password</Text>
-                    <TextInput
-                        placeholder='Enter your password'
-                        style={styles.input}
-                    />
+                        <Text style={styles.textLabel}>Username</Text>
+                        <TextInput
+                            placeholder='Enter your username'
+                            style={styles.input}
+                        />
 
-                    <View style={styles.buttonContent}>
-                        <TouchableOpacity style={styles.button} onPress={onPressLogin}>
-                            <Text style={{color: '#fff', fontSize: 16}}>Login</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <Text style={styles.textLabel}>Password</Text>
+                        <TextInput
+                            placeholder='Enter your password'
+                            style={styles.input}
+                        />
 
-                    <View style={styles.bottomContent}>
-                        <View style={{flexDirection:'row'}}>
-                            <Text style={{fontSize: 16}}>Don't have an account?</Text>
-                            <TouchableOpacity style={{marginLeft: 5}}>
-                                <Text style={{color: Colors.mainColor2, fontSize: 16}}>Register</Text>
+                        <View style={styles.buttonContent}>
+                            <TouchableOpacity style={styles.button} onPress={onPressLogin}>
+                                <Text style={{color: '#fff', fontSize: 16}}>Login</Text>
                             </TouchableOpacity>
                         </View>
+
+                        <View style={styles.bottomContent}>
+                            <View style={{flexDirection:'row'}}>
+                                <Text style={{fontSize: 16}}>Don't have an account?</Text>
+                                <TouchableOpacity style={{marginLeft: 5}}>
+                                    <Text style={{color: Colors.mainColor2, fontSize: 16}}>Register</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
                     </View>
 
-                </View>
+                </ImageBackground>
             </View>
 
         </SafeAreaView>
@@ -69,23 +75,23 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         flexDirection : 'column',
+        backgroundColor: Colors.fontColor2,
     },
 
     BottomView: {
         flex: 3,
-        backgroundColor: Colors.mainColor1,
+        // backgroundColor: Colors.mainColor1,
         justifyContent: 'center',
     },
 
     formContainer: {
-        backgroundColor: Colors.fontColor2,
+        backgroundColor: 'rgba(0,0,0,.1)',
         padding: 10,
         borderRadius: 10,
         marginVertical: 20,
         marginHorizontal: 10,
-        elevation: 3,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
 
     textLabel : {
@@ -127,6 +133,11 @@ const styles = StyleSheet.create({
     bottomContent: {
         alignSelf : 'center',
         marginBottom: 20
-    }
+    },
+
+    imageBg: {
+        flex: 1,
+        justifyContent: 'center',
+    },
 
 });
