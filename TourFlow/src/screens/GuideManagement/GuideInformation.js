@@ -16,7 +16,7 @@ const GuideInformation = ({navigation, route}) => {
 
 
     const image = location_url;
-    const backIcon = require('../../../img/go-back.png');
+    const backIcon = require('../../../img/backImage.jpg');
     const navigtionIcon = require('../../../img/navigation.png');
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -47,8 +47,9 @@ const GuideInformation = ({navigation, route}) => {
                     top: 10,
                     left: 10
                 }}>
+                    <Lottie style={{width: '100%', zIndex:10}} source={require('../../../img/back.json')} autoPlay loop />
                     
-                <Image source={backIcon} style={{ width : '100%', height : '100%',}}/>
+                {/* <Image source={backIcon} style={{ width : '100%', height : '100%',}}/> */}
 
             </TouchableOpacity>
 
@@ -58,11 +59,6 @@ const GuideInformation = ({navigation, route}) => {
                 </ImageBackground>
             </View>
             <View style={styles.bottomSection}>
-
-                <View style={styles.header}>
-                    <Text style={{fontSize: 35, color:Colors.mainColor2, fontWeight: 'bold', flex:2, fontFamily: 'sans-serif-condensed'}}>{location}</Text>
-                    <Lottie style={{width: '12%'}} source={require('../../../img/heart-button.json')} autoPlay loop />
-                </View>
 
                 <View style={styles.details}>
                     <Lottie style={{width: '10%', bottom: 5}} source={require('../../../img/location-loading.json')} autoPlay loop />
@@ -74,6 +70,7 @@ const GuideInformation = ({navigation, route}) => {
                 <View style={styles.tabView}>
                     <View style={{flex:1, paddingLeft: '5%', justifyContent: 'center', backgroundColor: Colors.fontColor1}}>
                         <Text style={{fontSize: 24, color:Colors.fontColor2, fontWeight: 'bold', fontFamily: 'sans-serif-condensed'}}>{guide_name}</Text>
+                <Lottie style={{position: 'absolute', width: '60%', alignSelf:'flex-end', bottom:0, right:5 }} source={require('../../../img/5s.json')} autoPlay loop />
                     </View>
                     <View style={{flex:4, padding:15, backgroundColor: '#E7E7E7', marginHorizontal: 10, marginVertical: 20, borderRadius:15, elevation: 5, justifyContent: 'center'}}>
                         <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
@@ -101,13 +98,13 @@ const GuideInformation = ({navigation, route}) => {
                     resizeMode: 'cover',
                     position: 'absolute',
                     zIndex: 100,
-                    top: 10,
+                    bottom: 200,
                     right: 10,
                     backgroundColor: 'rgba(0, 179, 92,.8)',
                     borderRadius: 50
                 }}>
                     
-                <Lottie style={{width: '100%'}} source={require('../../../img/edit.json')} autoPlay loop />
+                <Lottie style={{width: '100%' }} source={require('../../../img/edit-green.json')} autoPlay loop />
 
             </TouchableOpacity>
 
@@ -120,7 +117,7 @@ const GuideInformation = ({navigation, route}) => {
                 }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{fontSize:26, color:Colors.fontColor1, fontWeight: 'bold', fontFamily: 'sans-serif-condensed', marginBottom: 10}}>Edit Data</Text>
+                        <Text style={{fontSize:26, color:Colors.fontColor1, fontWeight: 'bold', fontFamily: 'sans-serif-condensed', marginBottom: 10}}>Edit Info</Text>
 
                         <Lottie style={{width: '20%'}} source={require('../../../img/map-pin-location.json')} autoPlay loop />
 
@@ -211,15 +208,6 @@ const styles = StyleSheet.create({
         resizeMode: 'cover'
     },
 
-    header: {
-        flex : 1,
-        padding: 5,
-        marginLeft:10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 10, 
-    },
-
     details: {
         flex : 1,
         padding: 5,
@@ -256,7 +244,7 @@ const styles = StyleSheet.create({
 
     input: {
         height: 50,
-        marginTop: 15,
+        marginTop: 5,
         borderWidth: 1,
         borderColor : 'grey',
         padding: 10,
@@ -280,10 +268,10 @@ const styles = StyleSheet.create({
 
     textLabel : {
         alignSelf : 'flex-start',
-        color: Colors.mainColor1,
+        color: Colors.mainColor2,
         fontWeight: 'bold',
         fontSize: 18,
-        marginTop: 15,
+        marginTop: 5,
         marginLeft: '2%',
         fontFamily: 'sans-serif-condensed'
     },
@@ -296,7 +284,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: Colors.mainColor1,
+        backgroundColor: Colors.mainColor2,
         borderRadius: 10,
         width: 120,
         height: 50,

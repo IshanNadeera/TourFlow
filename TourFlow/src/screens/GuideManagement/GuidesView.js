@@ -17,32 +17,33 @@ const Guide = ({navigation}) => {
             'age':'30',
             'language':'English',
             'phone' : '0776738388',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_9675-2-1024x684.jpg.webp'
+            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/c122dbf78d303f75cbe19005f0262a90'
         },
         {
             'guide_id' : '2',
             'location_name' : 'Lipton Seat',
-            'city' : "Ella",
+            'city' : "Lipton Seat",
             'guide_name' : 'Siriwardana',
             'age':'30',
             'language':'English',
             'phone' : '0776738388',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_9285-Pano-1024x501.jpg.webp'
+            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/8231572242a18673640a51a3ac98eda5'
         },
         {
             'guide_id' : '3',
             'location_name' : 'Pidurangala',
-            'city' : "Ella",
+            'city' : "Pidurangala",
             'guide_name' : 'Siriwardana',
             'age':'30',
             'language':'English',
             'phone' : '0776738388',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_0299-1-1024x684.jpg.webp'
+            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/974b01697f654849b4f2d24e869f0870'
         },
         {
             'guide_id' : '4',
             'location_name' : 'Sigiriya Rock Fortress',
             'guide_name' : 'Siriwardana',
+            'city' : "Sigiriya",
             'age':'30',
             'language':'English',
             'phone' : '0776738388',
@@ -51,22 +52,22 @@ const Guide = ({navigation}) => {
         {
             'guide_id' : '5',
             'location_name' : 'Fort Frederick',
-            'city' : "Ella",
+            'city' : "Galle",
             'guide_name' : 'Siriwardana',
             'age':'30',
             'language':'English',
             'phone' : '0776738388',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_0116.jpg.webp'
+            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/2ca4de4fc87d849e39772f6df4b612e4'
         },
         {
             'guide_id' : '6',
             'location_name' : 'Secret Beach',
-            'city' : "Ella",
+            'city' : "Unawatuna",
             'guide_name' : 'Siriwardana',
             'age':'30',
             'language':'English',
             'phone' : '0776738388',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/04/DSC_8786-1024x684.jpg.webp'
+            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/8231572242a18673640a51a3ac98eda5'
         }
     ];
 
@@ -83,6 +84,10 @@ const Guide = ({navigation}) => {
         });
     }
 
+    const onPressAdd = () => {
+        navigation.navigate('AddGuide');
+    }
+
     const LocationItem = ({ id, name, city, language, phone, url, age, location }) => (
         <TouchableNativeFeedback onPress={ () => { onPressGuide(id, name, city, url, location, phone, language, age) }}>
             <View style={styles.container1}>
@@ -97,13 +102,11 @@ const Guide = ({navigation}) => {
 
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.text}>{city}</Text>
-                </View>
-                <View style={styles.textContainer}>
-                    <Lottie style={{width: '10%', marginBottom: 10}} source={require('../../../img/location-loading.json')} autoPlay loop />
+                    <Lottie style={{width: '8%', marginBottom: 7}} source={require('../../../img/location-loading.json')} autoPlay loop />
                     <Text style={styles.simpletext}>{city}</Text>
                 </View>
-                <Lottie style={{position: 'absolute', width: '35%', alignSelf:'flex-end', bottom:-10}} source={require('../../../img/heart-button.json')} autoPlay loop />
+                <Lottie style={{position: 'absolute', width: '60%', alignSelf:'flex-end', bottom:0, right:5 }} source={require('../../../img/5s.json')} autoPlay loop />
+
             </View>
         </TouchableNativeFeedback>
     );
@@ -114,11 +117,31 @@ const Guide = ({navigation}) => {
         <View style={styles.topView}>
             <View style={{flex:1}}>
                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                    <Text style = {{fontSize:40, fontWeight: 'bold', color: Colors.mainColor1, marginTop: 10, marginLeft: 10}}>Tour</Text>
-                    <Text style = {{fontSize:40, fontWeight: 'bold', color: Colors.mainColor2, marginTop: 10, marginLeft: 10}}>Guide</Text>
+                    {/* <Text style = {{fontSize:40, fontWeight: 'bold', color: Colors.mainColor1, marginTop: 10, marginLeft: 10}}>Tour</Text> */}
+                    <Text style = {{fontSize:30, fontWeight: 'bold', color: Colors.mainColor2, marginTop: 10, marginLeft: 10}}> Choose Your Guide</Text>
                 </View>
                 <Lottie style={{width: '100%'}} source={require('../../../img/guide.json')} autoPlay loop />
             </View>
+            <TouchableOpacity
+                        onPress={ () => { onPressAdd() }}
+                        style={{
+                            width : 70,
+                            height : 70,
+                            resizeMode: 'cover',
+                            position: 'absolute',
+                            zIndex: 100,
+                            bottom: 10,
+                            right: 10,
+                            top:60,
+                            backgroundColor: 'rgba(255, 255, 255,.7)',
+                            borderRadius: 50,
+                            borderColor: 'grey',
+                            borderWidth: 1
+                        }}>
+                    
+                        <Lottie style={{width: '100%'}} source={require('../../../img/addGuide.json')} autoPlay loop />
+
+                    </TouchableOpacity>
         </View>
 
         <View style={styles.bottomView}>
@@ -163,6 +186,7 @@ const Guide = ({navigation}) => {
                     initialNumToRender={5}
                 />
             </View>
+
         </View>
 
     </SafeAreaView>
@@ -244,7 +268,7 @@ const styles = StyleSheet.create({
 
     container1: {
         width : '100%',
-        height : 220,
+        height : 150,
         marginVertical : 10,
         borderRadius : 15,
         backgroundColor : '#FFF',
