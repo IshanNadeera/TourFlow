@@ -19,6 +19,7 @@ const AddTransport = ({ navigation }) => {
     const [province, setProvince] = React.useState();
     const [name, onChangeName] = React.useState('');
     const [city, onChangeCity] = React.useState('');
+    const [dis, onChangeDiscription] = React.useState('');
 
     const handleSubmit = () => {
         if (!company) {
@@ -73,7 +74,16 @@ const AddTransport = ({ navigation }) => {
             });
             return;
         }
-
+        if (!dis) {
+            SweetAlert.showAlertWithOptions({
+                subTitle: 'Discription required',
+                confirmButtonTitle: 'OK',
+                confirmButtonColor: 'green',
+                style: 'error',
+                cancellable: false,
+            });
+            return;
+        }
         if (!province) {
             SweetAlert.showAlertWithOptions({
                 subTitle: 'Province required',
@@ -137,20 +147,29 @@ const AddTransport = ({ navigation }) => {
                     loop
                 />
             </TouchableOpacity>
+            <Text
+                style={{
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                    color: Colors.fontColor1,
+                    textAlign: 'center',
+                    margin: 10,
+                }}>
+                {' '}
+                Find the new Transport Company on your area and if you want to add the
+                company to this site
+            </Text>
+            <View style={styles.buttonContent}>
+                <TouchableOpacity
+                    style={styles.button}
+                    activeOpacity={0.5}
+                    onPress={handleSubmit}>
+                    <Text style={{ color: '#fff', fontSize: 16 }}>Submit</Text>
+                </TouchableOpacity>
+            </View>
 
             <ScrollView style={styles.scrollView}>
-                <Text
-                    style={{
-                        fontSize: 12,
-                        fontWeight: 'bold',
-                        color: Colors.fontColor1,
-                        textAlign: 'center',
-                        margin: 10,
-                    }}>
-                    {' '}
-                    Find the new Transport Company on your area and if you want to add the
-                    company to this site
-                </Text>
+
 
                 <TextInput
                     style={styles.input}
@@ -175,6 +194,14 @@ const AddTransport = ({ navigation }) => {
                     style={styles.input}
                     onChangeText={onChangeCity}
                     placeholder="Enter Company City"
+                    placeholderTextColor="#929292"
+                />
+                <TextInput
+                    multiline={true}
+                    numberOfLines={6}
+                    style={styles.textArea}
+                    onChangeText={onChangeDiscription}
+                    placeholder="Enter Discription"
                     placeholderTextColor="#929292"
                 />
                 <Dropdown
@@ -209,15 +236,6 @@ const AddTransport = ({ navigation }) => {
                     selectedItemStyle={{ color: Colors.fontColor1 }}
                     primaryColor="#929292"
                 />
-
-                <View style={styles.buttonContent}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        activeOpacity={0.5}
-                        onPress={handleSubmit}>
-                        <Text style={{ color: '#fff', fontSize: 16 }}>Submit</Text>
-                    </TouchableOpacity>
-                </View>
             </ScrollView>
         </SafeAreaView>
     );
@@ -241,10 +259,21 @@ const styles = StyleSheet.create({
         color: Colors.fontColor1,
         textAlign: 'left',
     },
+    textArea: {
+        height: 90,
+        margin: '3.5%',
+        borderWidth: 1,
+        borderColor: 'grey',
+        padding: 10,
+        color: 'black',
+        width: '93%',
+        borderRadius: 10,
+    },
     scrollView: {
+        width: '93%',
         flex: 1,
         marginTop: '0%',
-        marginBottom: '20%',
+        marginBottom: '5%',
     },
     buttonContent: {
         alignSelf: 'center',

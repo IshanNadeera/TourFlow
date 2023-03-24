@@ -8,6 +8,7 @@ import GuideInformation from './src/screens/GuideManagement/GuideInformation';
 import Register from './src/screens/Register';
 import LocationAdd from './src/screens/LocationManagement/LocationAddView';
 import AddTransport from './src/screens/TransportManagement/AddTransport';
+import SingleCompany from './src/screens/TransportManagement/SingleCompany';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +25,9 @@ const App = () => {
         <Stack.Screen name='LocationAdd' component={LocationAdd} options={{ headerShown : false}} />
         
         <Stack.Screen name='GuideSingle' component={GuideInformation} options={{ headerShown : false}} />
+
         <Stack.Screen name='AddTransport' component={AddTransport} options={{ headerShown : false}} />
+        <Stack.Screen name='SingleCompany' component={SingleCompany} options={{ headerShown : false}} />
       </Stack.Navigator>
     </NavigationContainer>
   )
