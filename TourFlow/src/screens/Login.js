@@ -52,6 +52,15 @@ const Login = ({ navigation }) => {
                         style: 'error',
                         cancellable: false
                     });
+                }else if (error.code === "auth/wrong-password"){
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'Password in invalid',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false
+                    });
                 }
                 else if (error.code === "auth/user-not-found"){
                     SweetAlert.showAlertWithOptions({

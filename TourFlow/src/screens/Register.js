@@ -56,7 +56,7 @@ const Register = ({ navigation }) => {
                         subTitle: 'Registration Success. Please Login to proceed',
                         confirmButtonTitle: 'OK',
                         confirmButtonColor: 'green',
-                        style: 'error',
+                        style: 'success',
                         cancellable: false
                     },
                     callback => navigation.navigate('Login'));
