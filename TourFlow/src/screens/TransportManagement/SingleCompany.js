@@ -114,7 +114,39 @@ const SingleCompany = ({ navigation, route }) => {
             });
             return;
         }
-        alert('Submit');
+        firestore()
+            .collection('Company')
+            .doc(locationId)
+            .update({
+                location_description: locationDescription,
+                location_url: newLocationUrl == '' ? locationUrl : newLocationUrl,
+            })
+            .then(() => {
+                SweetAlert.showAlertWithOptions(
+                    {
+                        title: 'Success!',
+                        subTitle: 'Details Added Successfully!',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'success',
+                        cancellable: false,
+                    },
+                    callback => navigation.navigate('Initial'),
+                );
+            })
+            .catch(error => {
+                console.log(error.code);
+                if (error.code === 'auth/network-request-failed') {
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'Please check your internet connection',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false,
+                    });
+                }
+            });
         setModalVisible(false);
     }
 
@@ -155,7 +187,7 @@ const SingleCompany = ({ navigation, route }) => {
             </View>
 
             <View style={styles.middleSection}>
-                <ImageBackground src={image} resizeMode="cover" style={styles.image}>
+                <ImageBackground source={{ uri: "data:image/png;base64," + image }} resizeMode="cover" style={styles.image}>
 
                 </ImageBackground>
             </View>
