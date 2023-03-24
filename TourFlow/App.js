@@ -4,6 +4,7 @@ import Splash from './src/screens/Splash';
 import Login from './src/screens/Login';
 import Tabs from './src/navigation/Tabs';
 import LocationSingle from './src/screens/LocationManagement/LocationSingleView';
+import GuideInformation from './src/screens/GuideManagement/GuideInformation';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const App = () => {
         <Stack.Screen name='Initial' component={Tabs} options={{ headerShown : false}} />
 
         <Stack.Screen name='LocationSingle' component={LocationSingle} options={{ headerShown : false}} />
+        <Stack.Screen name='GuideSingle' component={GuideInformation} options={{ headerShown : false}} />
       </Stack.Navigator>
     </NavigationContainer>
   )
