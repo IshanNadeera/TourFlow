@@ -22,4 +22,4 @@ TourFlow is a tourist guide mobile application designed to assist tourists in ex
 
 - Perera P.L.D.N - IT20117146 
 
-- Gunasekara P.T.E.W - T20386436
+- Gunasekara P.T.E.W - IT20386436
