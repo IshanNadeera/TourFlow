@@ -66,17 +66,28 @@ const GuideInformation = ({navigation, route}) => {
 
                 <View style={styles.details}>
                     <Lottie style={{width: '10%', bottom: 5}} source={require('../../../img/location-loading.json')} autoPlay loop />
-                    <Text style={{fontSize: 18, color:Colors.fontColor1, fontFamily: 'sans-serif-condensed'}}>{city}</Text>
+                    <Text style={{fontSize: 18, color:Colors.fontColor1, fontFamily: 'sans-serif-condensed'}}>{location}</Text>
                     <Image source={navigtionIcon} style={{ width : 25, height : 25, tintColor: Colors.mainColor3, marginLeft:20}}/>
-                    <Text style={{fontSize: 18, color:Colors.fontColor1, marginLeft:10, fontFamily: 'sans-serif-condensed'}}>Badulla District</Text>
+                    <Text style={{fontSize: 18, color:Colors.fontColor1, marginLeft:10, fontFamily: 'sans-serif-condensed'}}>{city}</Text>
                 </View>
 
                 <View style={styles.tabView}>
                     <View style={{flex:1, paddingLeft: '5%', justifyContent: 'center', backgroundColor: Colors.fontColor1}}>
-                        <Text style={{fontSize: 24, color:Colors.fontColor2, fontWeight: 'bold', fontFamily: 'sans-serif-condensed'}}>About</Text>
+                        <Text style={{fontSize: 24, color:Colors.fontColor2, fontWeight: 'bold', fontFamily: 'sans-serif-condensed'}}>{guide_name}</Text>
                     </View>
                     <View style={{flex:4, padding:15, backgroundColor: '#E7E7E7', marginHorizontal: 10, marginVertical: 20, borderRadius:15, elevation: 5, justifyContent: 'center'}}>
-                        <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>Little Adam's Peak, also referred to as Mini Adam's Peak, is another popular Ella hiking destination in the vicinity. The 1,141 metre peak is a relatively less demanding hike than that of Ella Rock. The hike takes you through boundless scenic tea plantations, taking only approximately 45 minutes to complete.</Text>
+                        <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
+                            Name: {guide_name}
+                        </Text>
+                        <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
+                            Age: {age}
+                        </Text>
+                        <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
+                            Language: {guide_language}
+                        </Text>
+                        <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
+                            Phone: {guide_phone}
+                        </Text>
                     </View>
                 </View>
 

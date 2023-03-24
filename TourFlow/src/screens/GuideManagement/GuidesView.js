@@ -70,20 +70,31 @@ const Guide = ({navigation}) => {
         }
     ];
 
-    const onPressGuide = (id, name, city, url,location,phone,language) => {
-        navigation.navigate('GuideSingle', {id: id, name: name, city: city, location:location, phone:phone, url:url, language:language});
+    const onPressGuide = (id, name, city, url, location, phone, language, age) => {
+        navigation.navigate('GuideSingle', {
+            id: id, 
+            name: name, 
+            age:age,
+            city: city, 
+            location:location, 
+            phone:phone, 
+            url:url, 
+            language:language
+        });
     }
 
-    const LocationItem = ({ id, name, city, location, phone, url}) => (
-        <TouchableNativeFeedback onPress={ () => { onPressGuide(id, name, city, url) }}>
+    const LocationItem = ({ id, name, city, language, phone, url, age, location }) => (
+        <TouchableNativeFeedback onPress={ () => { onPressGuide(id, name, city, url, location, phone, language, age) }}>
             <View style={styles.container1}>
-                <Image style={styles.image} src={url} />
-                {/* <Text style={{textAlign:'right', position: 'absolute', right:20, fontSize:20, fontWeight:'bold' }}>{name}</Text> */}
-                <View style={{textAlign:'right', position: 'absolute', right:20, fontSize:20, fontWeight:'bold' }}>
-                    <Text style={styles.text}>{name}</Text>
-                    <Text style={{fontSize:15}}>English, German</Text>
+                <View style={styles.guideView}>
+                    <Image style={styles.image} src={url} />
+                <View style={{left:10}}>
+                <Text style={{fontSize:15, fontWeight:'bold', fontSize:20}}>{name}</Text>
+                    <Text style={{fontSize:15}}>{language}</Text>
                     <Text style={{fontSize:15}}>{phone}</Text>
-                    <Text style={{fontSize:15}}>age : 31</Text>
+                    <Text style={{fontSize:15}}>age : {age}</Text>
+                </View>
+
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>{city}</Text>
@@ -141,9 +152,11 @@ const Guide = ({navigation}) => {
                             id={item.guide_id}
                             name={item.guide_name}
                             city={item.city}
-                            location={item.location_name}
+                            language={item.language}
                             phone={item.phone}
                             url={item.location_url}
+                            age={item.age}
+                            location={item.location_name}
                         />
                     }
                     keyExtractor={(item) => item.guide_id}
@@ -201,7 +214,8 @@ const styles = StyleSheet.create({
         // backgroundColor: Colors.mainColor1,
         paddingHorizontal: 10,
         justifyContent: 'center',
-        marginBottom: '18%'
+        marginBottom: '18%',
+        // flexDirection: 'row',
     },
 
     textInput:{
@@ -209,8 +223,8 @@ const styles = StyleSheet.create({
     },
 
     image : {
-        width : '50%',
-        height : '50%',
+        width : '40%',
+        height : '100%',
         borderRadius : 15,
         resizeMode: 'cover'
     },
@@ -237,7 +251,14 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderWidth: 0,
         elevation:6,
-        paddingBottom: 10
+        paddingBottom: 10,
+        
+    },
+
+    guideView : {
+        flexDirection : 'row',
+        padding:10
+        // left: 20
     },
 
     simpletext : {
