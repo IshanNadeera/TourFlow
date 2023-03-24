@@ -77,10 +77,16 @@ const Restaurant = ({navigation}) => {
                     <Text style={styles.text}>{name}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Lottie style={{width: '10%', marginBottom: 10}} source={require('../../../img/location-loading.json')} autoPlay loop />
+                    <Lottie style={{width: '10%', marginBottom: 10}} source={require('../../../img/calendar.json')} autoPlay loop />
                     <Text style={styles.simpletext}>{city}</Text>
                 </View>
-                <Lottie style={{width: '100%'}} source={require('../../../img/addGuide.json')} autoPlay loop />
+                <Lottie   style={{
+            width: '55%',
+            alignSelf: 'flex-end',
+            bottom: 5,
+            right:15,
+            position:"absolute"
+          }} source={require('../../../img/5s.json')} autoPlay loop />
 
             </View>
         </TouchableNativeFeedback>
