@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -7,11 +7,16 @@ import {
     TextInput,
     ScrollView,
     TouchableOpacity,
+    Image,
+    Dimensions,
 } from 'react-native';
 import Colors from '../../utils/Colors';
 import Lottie from 'lottie-react-native';
 import Dropdown from 'react-native-input-select';
 import SweetAlert from 'react-native-sweet-alert';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { isEmpty } from "lodash";
+import firestore from '@react-native-firebase/firestore';
 
 const AddTransport = ({ navigation }) => {
     const [company, onChangeText] = React.useState('');
@@ -20,6 +25,37 @@ const AddTransport = ({ navigation }) => {
     const [name, onChangeName] = React.useState('');
     const [city, onChangeCity] = React.useState('');
     const [dis, onChangeDiscription] = React.useState('');
+    const [filePath, setFilePath] = useState({});
+
+
+    const chooseFile = (type) => {
+        let options = {
+            mediaType: type,
+            maxWidth: 300,
+            maxHeight: 550,
+            quality: 1,
+            includeBase64: true
+        };
+        launchImageLibrary(options, (response) => {
+
+            if (response.didCancel) {
+                console.log('The user closed the camera selector.');
+                return;
+            } else if (response.errorCode == 'camera_unavailable') {
+                alert('No camera is present on the device.');
+                return;
+            } else if (response.errorCode == 'permission') {
+                alert('Permission not granted');
+                return;
+            } else if (response.errorCode == 'others') {
+                alert(response.errorMessage);
+                return;
+            }
+
+            setFilePath(response.assets[0]);
+
+        });
+    };
 
     const handleSubmit = () => {
         if (!company) {
@@ -94,11 +130,66 @@ const AddTransport = ({ navigation }) => {
             });
             return;
         }
-        alert('Submit');
+        if (!filePath) {
+            SweetAlert.showAlertWithOptions({
+                subTitle: 'Image required',
+                confirmButtonTitle: 'OK',
+                confirmButtonColor: 'green',
+                style: 'error',
+                cancellable: false,
+            });
+            return;
+        }
+
+        var id = "id" + Math.random().toString(16).slice(2);
+
+        firestore().collection('Company').doc(id).set({
+            company_id: id,
+            company_name: company,
+            city: city,
+            number: mobile,
+            driver:name,
+            province: province,
+            description: dis,
+            url: filePath.base64
+        })
+            .then(() => {
+                console.log('Company added!');
+
+                SweetAlert.showAlertWithOptions({
+                    title: 'Success!',
+                    subTitle: 'Company Added Successfully!',
+                    confirmButtonTitle: 'OK',
+                    confirmButtonColor: 'green',
+                    style: 'success',
+                    cancellable: false
+                },
+                    callback => navigation.navigate('Transport'));
+            }).catch((error) => {
+                console.log(error.code);
+                if (error.code === "auth/network-request-failed") {
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'Please check your internet connection',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false
+                    });
+                }
+            });
     };
 
     const onPressBack = () => {
         navigation.navigate('Transport')
+    }
+
+    const onPressClose = () => {
+        setModalVisible(false);
+    }
+
+    const onPressUploadImages = () => {
+        setModalVisible(true);
     }
 
     return (
@@ -236,6 +327,22 @@ const AddTransport = ({ navigation }) => {
                     selectedItemStyle={{ color: Colors.fontColor1 }}
                     primaryColor="#929292"
                 />
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={{ fontSize: 26, color: Colors.fontColor1, fontWeight: 'bold', fontFamily: 'sans-serif-condensed', marginBottom: 10 }}>Upload Company Image</Text>
+                        <TouchableOpacity onPress={() => chooseFile('photo')}>
+                            <View style={styles.uploadContainer}>
+                                {!isEmpty(filePath) ? <Image
+                                    source={{ uri: "data:image/png;base64," + filePath.base64 }}
+                                    style={styles.imageStyle}
+                                />
+                                    :
+                                    <Lottie style={{ width: '90%' }} source={require('../../../img/upload.json')} autoPlay loop />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </ScrollView>
         </SafeAreaView>
     );
@@ -287,4 +394,43 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: '2%',
     },
+    imageStyle: {
+        width: 185,
+        height: 185,
+        margin: 5,
+        resizeMode: 'cover'
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    modalView: {
+        margin: 20,
+        width: '95%',
+        backgroundColor: 'white',
+        borderRadius: 15,
+        padding: 25,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 2,
+            height: 4,
+        },
+        shadowOpacity: 0.55,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    uploadContainer: {
+        marginTop: '15%',
+        marginBottom: '15%',
+        height: 200,
+        width: 200,
+        borderWidth: 2,
+        borderStyle: 'dashed',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
