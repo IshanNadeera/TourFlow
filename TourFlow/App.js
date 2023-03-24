@@ -5,6 +5,7 @@ import Login from './src/screens/Login';
 import Tabs from './src/navigation/Tabs';
 import LocationSingle from './src/screens/LocationManagement/LocationSingleView';
 import GuideInformation from './src/screens/GuideManagement/GuideInformation';
+import Register from './src/screens/Register';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen name='Splash' component={Splash} options={{ headerShown : false}} />
         <Stack.Screen name='Login' component={Login} options={{ headerShown : false}} />
+        <Stack.Screen name='Register' component={Register} options={{ headerShown : false}} />
         <Stack.Screen name='Initial' component={Tabs} options={{ headerShown : false}} />
 
         <Stack.Screen name='LocationSingle' component={LocationSingle} options={{ headerShown : false}} />
