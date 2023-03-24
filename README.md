@@ -1,5 +1,7 @@
 # TourFlow
 
+![tourflow_logo](https://user-images.githubusercontent.com/86223874/227619170-9aa02b5d-4769-4ca5-99d5-62d7377c145d.png)
+
 ### Breif Description about project
 
 TourFlow is a tourist guide mobile application designed to assist tourists in exploring new destinations in sri lanka by providing them with relevant information and recommendations.
