@@ -1,52 +1,22 @@
 import React, { useState } from "react";
-import {View, Text, StyleSheet, SafeAreaView, ImageBackground, Dimensions, TextInput, TouchableOpacity, Image, FlatList, TouchableNativeFeedback, Platform, PermissionsAndroid,} from 'react-native'
+import {View, Text, StyleSheet, SafeAreaView, ImageBackground, Dimensions, TextInput, TouchableOpacity, Image, Modal, TouchableNativeFeedback, Platform, PermissionsAndroid,} from 'react-native'
 import Colors from "../../utils/Colors";
 import Lottie from 'lottie-react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Dropdown from 'react-native-input-select';
+import SweetAlert from 'react-native-sweet-alert';
+import {isEmpty} from "lodash"
+import auth, { firebase } from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
 
 const LocationAdd = ({navigation}) => {
 
     const [filePath, setFilePath] = useState({});
-    const [district, setDistrict] = React.useState();
-
-    const requestCameraPermission = async () => {
-        if (Platform.OS === 'android') {
-          try {
-            const granted = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.CAMERA,
-              {
-                title: 'Camera Permission',
-                message: 'This app needs camera permission to get photos',
-              },
-            );
-            // If CAMERA Permission is granted
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-          } catch (err) {
-                console.warn(err);
-            return false;
-          }
-        } else return true;
-    };
-
-    const requestExternalWritePermission = async () => {
-        if (Platform.OS === 'android') {
-          try {
-            const granted = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-              {
-                title: 'External Storage Write Permission',
-                message: 'This app needs write permission to upload photos',
-              },
-            );
-            // If WRITE_EXTERNAL_STORAGE Permission is granted
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-          } catch (err) {
-                console.warn(err);
-          }
-          return false;
-        } else return true;
-    };
+    const [locationName, setLocationName] = useState("");
+    const [city, setCity] = useState("");
+    const [description, setDescription] = useState("");
+    const [district, setDistrict] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
 
     const chooseFile = (type) => {
         let options = {
@@ -57,11 +27,9 @@ const LocationAdd = ({navigation}) => {
           includeBase64: true
         };
         launchImageLibrary(options, (response) => {
-
-          console.log('Response = ', response);
     
           if (response.didCancel) {
-            alert('The user closed the camera selector.');
+            console.log('The user closed the camera selector.');
             return;
           }else if (response.errorCode == 'camera_unavailable') {
             alert('No camera is present on the device.');
@@ -74,7 +42,6 @@ const LocationAdd = ({navigation}) => {
             return;
           }
 
-        //   console.log('base64 -> ', response.assets[0].base64);
           setFilePath(response.assets[0]);
 
         });
@@ -93,23 +60,98 @@ const LocationAdd = ({navigation}) => {
                         {name : 'Kilinochchi'}
                         ]
 
+    const onPressClose = () => {
+        setModalVisible(false);
+    }
+
+    const onPressUploadImages = () => {
+        setModalVisible(true);
+    }
+
+    const onPressAddLocation = () => {
+        if(locationName == '' || city == '' || district == '' || description == ''){
+            SweetAlert.showAlertWithOptions({
+                title: 'Error!',
+                subTitle: 'Input fields cannot be empty',
+                confirmButtonTitle: 'OK',
+                confirmButtonColor: 'green',
+                style: 'error',
+                cancellable: false
+            });
+        }else if(isEmpty(filePath)){
+            SweetAlert.showAlertWithOptions({
+                title: 'Error!',
+                subTitle: 'Please select an image',
+                confirmButtonTitle: 'OK',
+                confirmButtonColor: 'green',
+                style: 'error',
+                cancellable: false
+            });
+        }else{
+
+            var id = "id" + Math.random().toString(16).slice(2);
+
+            firestore().collection('Locations').doc(id).set({
+                location_id: id,
+                location_name: locationName,
+                location_city: city,
+                location_district: district,
+                location_description: description,
+                location_url: filePath.base64
+            })
+            .then(() => {
+                console.log('Location added!');
+
+                SweetAlert.showAlertWithOptions({
+                    title: 'Success!',
+                    subTitle: 'Location Added Successfully!',
+                    confirmButtonTitle: 'OK',
+                    confirmButtonColor: 'green',
+                    style: 'success',
+                    cancellable: false
+                },
+                callback => navigation.navigate('Initial'));
+            }).catch((error)=>{
+                console.log(error.code);
+                if (error.code === "auth/network-request-failed"){
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'Please check your internet connection',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false
+                    });
+                }
+            });
+        }
+    }
+
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Text style={{fontSize:28, color:Colors.fontColor2, fontWeight: 'bold', fontFamily: 'sans-serif-condensed', marginBottom: 10}}>Add new location</Text>
             </View>
             <View style={styles.animation}>
-                <Lottie style={{width: '30%'}} source={require('../../../img/map-pin-location.json')} autoPlay loop />
+                <Lottie style={{width: '20%'}} source={require('../../../img/map-pin-location.json')} autoPlay loop />
             </View>
             <View style={styles.content}>
 
                 <Text style={styles.textLabel}>Location Name</Text>
                 <TextInput
+                    placeholder='Enter location name'
                     style={styles.input}
+                    onChangeText={(location_name) =>
+                        setLocationName(location_name)
+                    }
                 />
                 <Text style={styles.textLabel}>City</Text>
                 <TextInput
+                    placeholder='Enter main city'
                     style={styles.input}
+                    onChangeText={(city) =>
+                        setCity(city)
+                    }
                 />
                 <Text style={styles.textLabelDropdown}>District</Text>
                 <Dropdown
@@ -132,30 +174,75 @@ const LocationAdd = ({navigation}) => {
                     multiline={true}
                     numberOfLines={5}
                     style={styles.inputArea}
+                    onChangeText={(description) =>
+                        setDescription(description)
+                    }
+                    placeholder='Enter location breif description'
                 />
 
             </View>
+
+            <View style={styles.buttonContent}>
+                <TouchableOpacity style={styles.button} onPress={ () => { onPressUploadImages() }}>
+                    <Text style={{color: '#fff', fontSize: 16}}>Upload Image</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button2} onPress={ () => { onPressAddLocation() }}>
+                    <Text style={{color: '#fff', fontSize: 16}}>Add Location</Text>
+                </TouchableOpacity>
+            </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={{fontSize:26, color:Colors.fontColor1, fontWeight: 'bold', fontFamily: 'sans-serif-condensed', marginBottom: 10}}>Upload Cover Image</Text>
+                        <TouchableOpacity onPress={()=> chooseFile('photo')}>
+                            <View style={styles.uploadContainer}>
+                                {!isEmpty(filePath) ? <Image
+                                    source={{uri: "data:image/png;base64,"+filePath.base64}}
+                                    style={styles.imageStyle}
+                                /> 
+                                : 
+                                <Lottie style={{width: '90%'}} source={require('../../../img/upload.json')} autoPlay loop />
+                                }
+                            </View>
+                        </TouchableOpacity>
+    
+                        <TouchableOpacity
+                            onPress={ () => { onPressClose() }}
+                            style={{
+                                width : 50,
+                                height : 50,
+                                resizeMode: 'cover',
+                                position: 'absolute',
+                                zIndex: 100,
+                                top: 5,
+                                right: 5,
+                            }}>
+                                
+                            <Lottie style={{width: '100%'}} source={require('../../../img/cross-loop.json')} autoPlay loop />
+
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+            </Modal>
+
         </SafeAreaView>
     )
 }
-
-{/* <Image
-                source={{uri: "data:image/png;base64,"+filePath.base64}}
-                style={styles.imageStyle}
-            /> */}
-
-                {/* <View style={styles.buttonContent}>
-                    <TouchableOpacity style={styles.button} onPress={()=> chooseFile('photo')}>
-                        <Text style={{color: '#fff', fontSize: 16}}>Upload Image</Text>
-                    </TouchableOpacity>
-                </View> */}
 
 export default LocationAdd;
 
 const styles = StyleSheet.create({
     container: {
         flex : 1,
-        backgroundColor : Colors.bgColor
+        backgroundColor : Colors.fontColor2
     },
 
     header: {
@@ -167,7 +254,7 @@ const styles = StyleSheet.create({
     },
 
     animation: {
-        flex: 1.5,
+        flex: 1,
         padding: 10,
         backgroundColor : 'white',
         justifyContent: 'center',
@@ -182,23 +269,37 @@ const styles = StyleSheet.create({
 
     buttonContent: {
         alignSelf : 'center',
-        marginTop: 30,
-        marginBottom: 30
+        marginTop: 20,
+        marginBottom: 30,
+        flexDirection: 'row',
+        backgroundColor: Colors.fontColor2
     },
 
     button: {
-        backgroundColor: Colors.mainColor2,
+        backgroundColor: Colors.mainColor1,
         borderRadius: 10,
-        width: 150,
+        width: 120,
         height: 50,
         alignItems : 'center',
-        justifyContent : 'center'
+        justifyContent : 'center',
+        marginHorizontal: 10
+    },
+
+    button2: {
+        backgroundColor: Colors.mainColor2,
+        borderRadius: 10,
+        width: 120,
+        height: 50,
+        alignItems : 'center',
+        justifyContent : 'center',
+        marginHorizontal: 10
     },
 
     imageStyle: {
-        width: 200,
-        height: 200,
-        margin: 5
+        width: 185,
+        height: 185,
+        margin: 5,
+        resizeMode: 'cover'
     },
 
     input: {
@@ -246,4 +347,39 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
         fontFamily: 'sans-serif-condensed'
     },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    modalView: {
+        margin: 20,
+        width: '90%',
+        backgroundColor: 'white',
+        borderRadius: 15,
+        padding: 25,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 2,
+            height: 4,
+        },
+        shadowOpacity: 0.55,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+
+    uploadContainer: {
+        marginTop: '15%',
+        marginBottom: '15%',
+        height: 200,
+        width: 200,
+        borderWidth:2,
+        borderStyle: 'dashed',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
