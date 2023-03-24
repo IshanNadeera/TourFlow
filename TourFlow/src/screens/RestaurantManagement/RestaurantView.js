@@ -11,6 +11,7 @@ import { useIsFocused } from "@react-navigation/native";
 const Restaurant = ({navigation}) => {
 
     const image = require("../../../img/food.jpg");
+    const image2 = require("../../../img/f1.png");
     const searchIcon = require('../../../img/search.png');
     const closeIcon = require('../../../img/close.png');
 
@@ -142,6 +143,7 @@ const Restaurant = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.restaurantContainer}>
+                <Image source={image2} resizeMode="cover" style={styles.imageBg2}/>
                     <FlatList
                         contentContainerStyle={{padding:5}}
                         removeClippedSubviews={true}
@@ -203,6 +205,10 @@ const styles = StyleSheet.create({
     imageBg: {
         flex: 1,
         justifyContent: 'center',
+    },
+
+    imageBg2: {
+        width:'100%'
     },
 
     imageContent: {
