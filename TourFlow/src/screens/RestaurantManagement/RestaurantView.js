@@ -61,16 +61,16 @@ const Restaurant = ({navigation}) => {
         }
     }
 
-    const onPressCard = (id, name, city, district, description, hours) => {
-        navigation.navigate('RestaurantSingle', {id: id, name: name, city: city, district: district, description: description, hours:hours});
+    const onPressCard = (id, name, city, hour, description,url) => {
+        navigation.navigate('RestaurantSingle', {id: id, name: name, city: city,hour:hour, description: description, url:url});
     }
 
     const onPressAdd = () => {
         navigation.navigate('RestaurantAdd');
     }
 
-    const RestaurantItem = ({ id, name, city, district, description, hours}) => (
-        <TouchableNativeFeedback onPress={ () => { onPressCard(id, name, city, district, description, hours) }}>
+    const RestaurantItem = ({ id, name, city, hour, description, url}) => (
+        <TouchableNativeFeedback onPress={ () => { onPressCard(id, name, city,hour, description, url) }}>
             <View style={styles.container1}>
                 <Image style={styles.image} source={{uri: "data:image/png;base64,"+url}} />
                 <View style={styles.textContainer}>
@@ -153,7 +153,7 @@ const Restaurant = ({navigation}) => {
                                 id={item.restaurant_id}
                                 name={item.restaurant_name}
                                 city={item.restaurant_city}
-                                district={item.restaurant_district}
+                                hour={item.restaurant_hour}
                                 description={item.restaurant_description}
                                 url={item.restaurant_url}
                             />
