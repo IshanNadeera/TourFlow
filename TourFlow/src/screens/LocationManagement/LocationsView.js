@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useFocusEffect } from "react";
 import {View, Text, StyleSheet, SafeAreaView, ImageBackground, Dimensions, TextInput, TouchableOpacity, Image, FlatList, TouchableNativeFeedback} from 'react-native'
 import Colors from "../../utils/Colors";
 import Lottie from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth, { firebase } from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
+import { useIsFocused } from "@react-navigation/native";
 
 
 const Location = ({navigation}) => {
@@ -11,24 +14,41 @@ const Location = ({navigation}) => {
     const searchIcon = require('../../../img/search.png');
     const closeIcon = require('../../../img/close.png');
 
+    const isFocused = useIsFocused();
+
     const [search, setSearch] = useState('');
     const [user, setUser] = useState({});
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
     const [filteredData, setFilteredData] = useState([]);
 
-
     useEffect(() => {
         getUser();
+        getLocations();
+
         setUsername(user.name);
-        setRole(user.name);
-        setFilteredData(data);
-    }, [])
+        setRole(user.role);
+    }, [isFocused])
 
     useEffect(() => {
         setUsername(user.name);
         setRole(user.role);
     },[user])
+
+    const getLocations = async() => {
+
+        var data = [];
+
+        firestore()
+        .collection('Locations')
+        .get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(documentSnapshot => {
+                data.push(documentSnapshot.data());
+            });
+            setFilteredData(data);
+        });
+    }
 
     const getUser = async() => {
         try {
@@ -40,57 +60,18 @@ const Location = ({navigation}) => {
         }
     }
 
-    const data = [
-        {
-            'location_id' : '1',
-            'location_name' : "Little Adam's Peak",
-            'location_address' : 'Ella',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_9675-2-1024x684.jpg.webp'
-        },
-        {
-            'location_id' : '2',
-            'location_name' : 'Lipton Seat',
-            'location_address' : 'Haputale',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_9285-Pano-1024x501.jpg.webp'
-        },
-        {
-            'location_id' : '3',
-            'location_name' : 'Pidurangala',
-            'location_address' : 'Sigiriya',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_0299-1-1024x684.jpg.webp'
-        },
-        {
-            'location_id' : '4',
-            'location_name' : 'Sigiriya Rock Fortress',
-            'location_address' : 'Sigiriya',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2020/04/Depositphotos_88178998_XL-1024x683.jpg.webp'
-        },
-        {
-            'location_id' : '5',
-            'location_name' : 'Fort Frederick',
-            'location_address' : 'Trincomalee',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_0116.jpg.webp'
-        },
-        {
-            'location_id' : '6',
-            'location_name' : 'Secret Beach',
-            'location_address' : 'Mirissa',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/04/DSC_8786-1024x684.jpg.webp'
-        }
-    ];
-
-    const onPressCard = (id, name, city, url) => {
-        navigation.navigate('LocationSingle', {id: id, name: name, city: city, url:url});
+    const onPressCard = (id, name, city, district, description, url) => {
+        navigation.navigate('LocationSingle', {id: id, name: name, city: city, district: district, description: description, url:url});
     }
 
     const onPressAdd = () => {
         navigation.navigate('LocationAdd');
     }
 
-    const LocationItem = ({ id, name, city, url}) => (
-        <TouchableNativeFeedback onPress={ () => { onPressCard(id, name, city, url) }}>
+    const LocationItem = ({ id, name, city, district, description, url}) => (
+        <TouchableNativeFeedback onPress={ () => { onPressCard(id, name, city, district, description, url) }}>
             <View style={styles.container1}>
-                <Image style={styles.image} src={url} />
+                <Image style={styles.image} source={{uri: "data:image/png;base64,"+url}} />
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>{name}</Text>
                 </View>
@@ -167,7 +148,9 @@ const Location = ({navigation}) => {
                             <LocationItem
                                 id={item.location_id}
                                 name={item.location_name}
-                                city={item.location_address}
+                                city={item.location_city}
+                                district={item.location_district}
+                                description={item.location_description}
                                 url={item.location_url}
                             />
                         }
