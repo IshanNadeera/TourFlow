@@ -14,8 +14,6 @@ const Tabs = ({navigation}) => {
         <Tab.Navigator screenOptions={{
             tabBarShowLabel: false,
             tabBarStyle: {
-                elevation:10,
-                // borderRadius: 15,
                 position: 'absolute',
                 height: 60,
                 left: 0,

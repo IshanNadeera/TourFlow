@@ -55,6 +55,10 @@ const Location = ({navigation}) => {
         navigation.navigate('LocationSingle', {id: id, name: name, city: city, url:url});
     }
 
+    const onPressAdd = () => {
+        navigation.navigate('LocationAdd');
+    }
+
     const LocationItem = ({ id, name, city, url}) => (
         <TouchableNativeFeedback onPress={ () => { onPressCard(id, name, city, url) }}>
             <View style={styles.container1}>
@@ -120,6 +124,28 @@ const Location = ({navigation}) => {
                         keyExtractor={(item) => item.location_id}
                         initialNumToRender={5}
                     />
+
+                    <TouchableOpacity
+                        onPress={ () => { onPressAdd() }}
+                        style={{
+                            width : 60,
+                            height : 60,
+                            resizeMode: 'cover',
+                            position: 'absolute',
+                            zIndex: 100,
+                            bottom: 5,
+                            right: '45%',
+                            left: '45%',
+                            backgroundColor: 'rgba(255, 255, 255,.7)',
+                            borderRadius: 50,
+                            borderColor: 'grey',
+                            borderWidth: 1
+                        }}>
+                    
+                        <Lottie style={{width: '100%'}} source={require('../../../img/add.json')} autoPlay loop />
+
+                    </TouchableOpacity>
+
                 </View>
             </View>
 
@@ -169,7 +195,6 @@ const styles = StyleSheet.create({
 
     locationContainer: {
         flex: 6,
-        // backgroundColor: Colors.mainColor1,
         paddingHorizontal: 10,
         justifyContent: 'center',
         marginBottom: '18%'
