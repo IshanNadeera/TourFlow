@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
         flexDirection : 'column',
         alignItems : 'center',
         justifyContent : 'center',
-        backgroundColor: 'rgba(60,60,60,.1)',
+        // backgroundColor: 'rgba(60,60,60,.1)',
         padding: 10,
         borderRadius: 10,
         marginVertical: 20,

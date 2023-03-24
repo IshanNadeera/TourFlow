@@ -1,16 +1,88 @@
 import React, {useState, createRef, useEffect} from 'react';
-import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from "react-native";
+import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Alert} from "react-native";
 import Colors from "../utils/Colors";
 import SweetAlert from 'react-native-sweet-alert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Lottie from 'lottie-react-native';
+import auth, { firebase } from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
 
     const image = require("../../img/bg3.jpeg");
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     const onPressLogin = () => {
-        navigation.navigate('Initial');
+        if(email == '' || password == ''){
+            SweetAlert.showAlertWithOptions({
+                title: 'Error!',
+                subTitle: 'Input fields cannot be empty',
+                confirmButtonTitle: 'OK',
+                confirmButtonColor: 'green',
+                style: 'error',
+                cancellable: false
+            });
+        }else{
+            firebase.auth().signInWithEmailAndPassword(email,password)
+            .then((user)=> {
+                const userId = user.user.uid
+
+                firestore()
+                .collection('users')
+                .where('uid', '==', userId)
+                .get()
+                .then(querySnapshot => {
+
+                  querySnapshot.forEach(documentSnapshot => {
+                    storeData(documentSnapshot.data());
+                  });
+                });
+                navigation.navigate('Initial');
+            })
+            .catch((error) => {
+                if (error.code === "auth/invalid-email"){
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'That email address is invalid',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false
+                    });
+                }
+                else if (error.code === "auth/user-not-found"){
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'No User Found, Check credentials again',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false
+                    });
+                }
+                console.log(error.message);
+            })
+        }
+    };
+
+    const storeData = async (value) => {
+
+        try {
+            await AsyncStorage.clear();
+
+            await AsyncStorage.setItem('User', JSON.stringify(value));
+
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+    }
+
+    const onPressRegister = () => {
+        navigation.navigate('Register');
     };
 
     return(
@@ -31,16 +103,22 @@ const Login = ({ navigation }) => {
 
                         <Text style = {{alignSelf: 'flex-start',fontSize:30, fontWeight: 'bold', color: Colors.fontColor1, marginLeft: 10}}>Welcome Back!</Text>
 
-                        <Text style={styles.textLabel}>Username</Text>
+                        <Text style={styles.textLabel}>Email</Text>
                         <TextInput
-                            placeholder='Enter your username'
+                            placeholder='Enter your email'
                             style={styles.input}
+                            onChangeText={(email) =>
+                                setEmail(email)
+                            }
                         />
 
                         <Text style={styles.textLabel}>Password</Text>
                         <TextInput
                             placeholder='Enter your password'
                             style={styles.input}
+                            onChangeText={(password) =>
+                                setPassword(password)
+                            }
                         />
 
                         <View style={styles.buttonContent}>
@@ -52,7 +130,7 @@ const Login = ({ navigation }) => {
                         <View style={styles.bottomContent}>
                             <View style={{flexDirection:'row'}}>
                                 <Text style={{fontSize: 16}}>Don't have an account?</Text>
-                                <TouchableOpacity style={{marginLeft: 5}}>
+                                <TouchableOpacity style={{marginLeft: 5}} onPress={onPressRegister}>
                                     <Text style={{color: Colors.mainColor2, fontSize: 16}}>Register</Text>
                                 </TouchableOpacity>
                             </View>
@@ -85,7 +163,7 @@ const styles = StyleSheet.create({
     },
 
     formContainer: {
-        backgroundColor: 'rgba(0,0,0,.1)',
+        backgroundColor: 'rgba(60,60,60,.1)',
         padding: 10,
         borderRadius: 10,
         marginVertical: 20,
