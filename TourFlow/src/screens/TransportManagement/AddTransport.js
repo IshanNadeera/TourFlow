@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    TextInput,
+    ScrollView,
+    TouchableOpacity,
+} from 'react-native';
 import Colors from '../../utils/Colors';
 import Lottie from 'lottie-react-native';
 import Dropdown from 'react-native-input-select';
@@ -19,7 +27,7 @@ const AddTransport = ({ navigation }) => {
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
-                cancellable: false
+                cancellable: false,
             });
             return;
         }
@@ -29,7 +37,7 @@ const AddTransport = ({ navigation }) => {
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
-                cancellable: false
+                cancellable: false,
             });
             return;
         }
@@ -39,18 +47,18 @@ const AddTransport = ({ navigation }) => {
                 confirmButtonTitle: 'OK',
                 onfirmButtonColor: 'green',
                 style: 'error',
-                cancellable: false
+                cancellable: false,
             });
             return;
         }
 
         if (!name) {
             SweetAlert.showAlertWithOptions({
-                subTitle: 'Owner name required',
+                subTitle: 'Driver name required',
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
-                cancellable: false
+                cancellable: false,
             });
             return;
         }
@@ -61,7 +69,7 @@ const AddTransport = ({ navigation }) => {
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
-                cancellable: false
+                cancellable: false,
             });
             return;
         }
@@ -72,23 +80,36 @@ const AddTransport = ({ navigation }) => {
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
-                cancellable: false
+                cancellable: false,
             });
             return;
         }
-        alert("Submit");
+        alert('Submit');
+    };
 
-
+    const onPressBack = () => {
+        navigation.navigate('Transport')
     }
 
     return (
         <SafeAreaView style={styles.container}>
-
-            <View style={{
-                flexDirection: 'row', alignSelf: 'center', alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <Text style={{ fontSize: 30, fontWeight: 'bold', color: Colors.mainColor2, marginTop: 20, marginBottom: 5 }}>Add Transports</Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                <Text
+                    style={{
+                        fontSize: 30,
+                        fontWeight: 'bold',
+                        color: Colors.mainColor2,
+                        marginTop: 20,
+                        marginBottom: 5,
+                    }}>
+                    Add Transports
+                </Text>
             </View>
             <Lottie
                 style={{ width: '75%' }}
@@ -97,9 +118,39 @@ const AddTransport = ({ navigation }) => {
                 loop
             />
 
-            <ScrollView style={styles.scrollView}>
+            <TouchableOpacity
+                onPress={() => {
+                    onPressBack();
+                }}
+                style={{
+                    width: 60,
+                    height: 60,
+                    position: 'absolute',
+                    zIndex: 10,
+                    top: 12,
+                    left: 0,
+                }}>
+                <Lottie
+                    style={{ width: '100%' }}
+                    source={require('../../../img/backbutton.json')}
+                    autoPlay
+                    loop
+                />
+            </TouchableOpacity>
 
-                <Text style={{ fontSize: 12, fontWeight: 'bold', color: Colors.fontColor1, textAlign: 'center', margin: 10, }}> Find the new Transport Company on your area and if you want to add the company to this site</Text>
+            <ScrollView style={styles.scrollView}>
+                <Text
+                    style={{
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                        color: Colors.fontColor1,
+                        textAlign: 'center',
+                        margin: 10,
+                    }}>
+                    {' '}
+                    Find the new Transport Company on your area and if you want to add the
+                    company to this site
+                </Text>
 
                 <TextInput
                     style={styles.input}
@@ -117,7 +168,7 @@ const AddTransport = ({ navigation }) => {
                 <TextInput
                     style={styles.input}
                     onChangeText={onChangeName}
-                    placeholder="Enter Company Owner Name"
+                    placeholder="Enter Driver Name"
                     placeholderTextColor="#929292"
                 />
                 <TextInput
@@ -127,7 +178,6 @@ const AddTransport = ({ navigation }) => {
                     placeholderTextColor="#929292"
                 />
                 <Dropdown
-
                     placeholder="Enter Your Province"
                     options={[
                         { name: 'Central Province', code: 'Central' },
@@ -143,26 +193,27 @@ const AddTransport = ({ navigation }) => {
                     optionLabel={'name'}
                     optionValue={'code'}
                     selectedValue={province}
-                    onValueChange={(value) => setProvince(value)}
+                    onValueChange={value => setProvince(value)}
                     dropdownStyle={{
-                        width: "93%",
-                        margin: "3.5%",
+                        width: '93%',
+                        margin: '3.5%',
                         borderWidth: 1,
-                        borderColor :'grey',
+                        borderColor: 'grey',
                         borderRadius: 10,
-                        color: "#929292",
+                        color: '#929292',
                     }}
                     dropdownContainerStyle={{
-                        color: "#929292",
-                        borderColor :'grey',
+                        color: '#929292',
+                        borderColor: 'grey',
                     }}
-
                     selectedItemStyle={{ color: Colors.fontColor1 }}
                     primaryColor="#929292"
                 />
 
                 <View style={styles.buttonContent}>
-                    <TouchableOpacity style={styles.button} activeOpacity={0.5}
+                    <TouchableOpacity
+                        style={styles.button}
+                        activeOpacity={0.5}
                         onPress={handleSubmit}>
                         <Text style={{ color: '#fff', fontSize: 16 }}>Submit</Text>
                     </TouchableOpacity>
@@ -183,20 +234,20 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 50,
-        margin: "3.5%",
+        margin: '3.5%',
         borderWidth: 1,
         borderRadius: 10,
-        borderColor :'grey',
+        borderColor: 'grey',
         color: Colors.fontColor1,
-        textAlign: "left",
+        textAlign: 'left',
     },
     scrollView: {
         flex: 1,
-        marginTop: "0%",
-        marginBottom: "20%",
+        marginTop: '0%',
+        marginBottom: '20%',
     },
     buttonContent: {
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     button: {
         backgroundColor: Colors.mainColor2,
@@ -205,6 +256,6 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: "2%"
+        marginBottom: '2%',
     },
 });
