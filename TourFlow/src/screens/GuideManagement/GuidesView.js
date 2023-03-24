@@ -1,194 +1,249 @@
-import React from "react";
-import {View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView, FlatList,  } from 'react-native'
+import React, { useState } from "react";
+import {TouchableNativeFeedback, FlatList, ImageBackground, View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image,  } from 'react-native'
 import Colors from "../../utils/Colors";
 import Lottie from 'lottie-react-native';
 
 
 const Guide = ({navigation}) => {
+    const searchIcon = require('../../../img/search.png');
+    const [search, setSearch] = useState('');
 
-    const cards = [
-        { name: 'guide 1', location:'kandy' },
-        { name: 'guide 2', location:'kandy' },
-        { name: 'guide 3', location:'kandy' },
-        { name: 'guide 4', location:'kandy' },
-        { name: 'guide 5', location:'kandy' },
-        { name: 'guide 6', location:'kandy' },
-        { name: 'guide 7', location:'kandy' },
-        { name: 'guide 8', location:'kandy' },
-        { name: 'guide 9', location:'kandy' },
-        { name: 'guide 10', location:'kandy' },
+    const data = [
+        {
+            'guide_id' : '1',
+            'location_name' : "Ella",
+            'city' : "Ella",
+            'guide_name' : 'Siriwardana',
+            'age':'30',
+            'language':'English',
+            'phone' : '0776738388',
+            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_9675-2-1024x684.jpg.webp'
+        },
+        {
+            'guide_id' : '2',
+            'location_name' : 'Lipton Seat',
+            'city' : "Ella",
+            'guide_name' : 'Siriwardana',
+            'age':'30',
+            'language':'English',
+            'phone' : '0776738388',
+            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_9285-Pano-1024x501.jpg.webp'
+        },
+        {
+            'guide_id' : '3',
+            'location_name' : 'Pidurangala',
+            'city' : "Ella",
+            'guide_name' : 'Siriwardana',
+            'age':'30',
+            'language':'English',
+            'phone' : '0776738388',
+            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_0299-1-1024x684.jpg.webp'
+        },
+        {
+            'guide_id' : '4',
+            'location_name' : 'Sigiriya Rock Fortress',
+            'guide_name' : 'Siriwardana',
+            'age':'30',
+            'language':'English',
+            'phone' : '0776738388',
+            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2020/04/Depositphotos_88178998_XL-1024x683.jpg.webp'
+        },
+        {
+            'guide_id' : '5',
+            'location_name' : 'Fort Frederick',
+            'city' : "Ella",
+            'guide_name' : 'Siriwardana',
+            'age':'30',
+            'language':'English',
+            'phone' : '0776738388',
+            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/05/DSC_0116.jpg.webp'
+        },
+        {
+            'guide_id' : '6',
+            'location_name' : 'Secret Beach',
+            'city' : "Ella",
+            'guide_name' : 'Siriwardana',
+            'age':'30',
+            'language':'English',
+            'phone' : '0776738388',
+            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2019/04/DSC_8786-1024x684.jpg.webp'
+        }
     ];
 
-    const selectGuide = () => {
-        navigation.navigate('Initial');
-    };
+    const onPressGuide = (id, name, city, url,location,phone,language) => {
+        navigation.navigate('GuideSingle', {id: id, name: name, city: city, location:location, phone:phone, url:url, language:language});
+    }
 
-    const OrderItem = ({ name, img, location }) => (
-        
-        <TouchableWithoutFeedback>
-            <View style={styles.card}>
-                <Text style={{ marginTop:10, color:'black' }}>Location: {location}, name: {name} </Text>
+    const LocationItem = ({ id, name, city, location, phone, url}) => (
+        <TouchableNativeFeedback onPress={ () => { onPressGuide(id, name, city, url) }}>
+            <View style={styles.container1}>
+                <Image style={styles.image} src={url} />
+                {/* <Text style={{textAlign:'right', position: 'absolute', right:20, fontSize:20, fontWeight:'bold' }}>{name}</Text> */}
+                <View style={{textAlign:'right', position: 'absolute', right:20, fontSize:20, fontWeight:'bold' }}>
+                    <Text style={styles.text}>{name}</Text>
+                    <Text style={{fontSize:15}}>English, German</Text>
+                    <Text style={{fontSize:15}}>{phone}</Text>
+                    <Text style={{fontSize:15}}>age : 31</Text>
+                </View>
+                <View style={styles.textContainer}>
+                    <Text style={styles.text}>{city}</Text>
+                </View>
+                <View style={styles.textContainer}>
+                    <Lottie style={{width: '10%', marginBottom: 10}} source={require('../../../img/location-loading.json')} autoPlay loop />
+                    <Text style={styles.simpletext}>{city}</Text>
+                </View>
+                <Lottie style={{position: 'absolute', width: '35%', alignSelf:'flex-end', bottom:-10}} source={require('../../../img/heart-button.json')} autoPlay loop />
             </View>
-        </TouchableWithoutFeedback>
+        </TouchableNativeFeedback>
     );
-
-    const addGuide = () => {
-        navigation.navigate('Initial');
-    };
 
     return(
         <SafeAreaView style={styles.container}>
-            <View style={{flex:2.5, marginTop: 10}}>
+
+        <View style={styles.topView}>
+            <View style={{flex:1}}>
                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                    <Text style = {{fontSize:50, fontWeight: 'bold', color: Colors.mainColor1, marginTop: 10, marginLeft: 10}}>Tour</Text>
-                    <Text style = {{fontSize:50, fontWeight: 'bold', color: Colors.mainColor2, marginTop: 10, marginLeft: 10}}>Flow</Text>
+                    <Text style = {{fontSize:40, fontWeight: 'bold', color: Colors.mainColor1, marginTop: 10, marginLeft: 10}}>Tour</Text>
+                    <Text style = {{fontSize:40, fontWeight: 'bold', color: Colors.mainColor2, marginTop: 10, marginLeft: 10}}>Guide</Text>
                 </View>
                 <Lottie style={{width: '100%'}} source={require('../../../img/guide.json')} autoPlay loop />
-                <Text style = {{fontSize:30, fontWeight: 'bold', color: Colors.fontColor1, textAlign: 'center'}}>Select Your Guide!</Text>
             </View>
+        </View>
 
-            <View style={styles.buttonContent}>
-                <TouchableOpacity style={styles.button} onPress={addGuide}>
-                    <Text style={styles.headerText}>+ Add Guide</Text>
-                </TouchableOpacity>
-            </View> 
-
-            <View style={styles.BottomView}>
-                <View style={styles.formContainer}>
-                    <Text style={styles.textLabel}>Location</Text>
-                    <TextInput
-                        placeholder='Enter Location'
-                        style={styles.input}
+        <View style={styles.bottomView}>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Search location or Guide from here.."
+                    keyboardType="default"
+                    underlineColorAndroid="transparent"
+                />
+                <TouchableOpacity>
+                    <Image source= {search == '' ? searchIcon : closeIcon}
+                        resizeMode='contain'
+                        style={{
+                            width: 30,
+                            height: 30,
+                            top: 10,
+                            right: 10,
+                            tintColor: Colors.mainColor1
+                        }}
                     />
-
-                </View>
+                </TouchableOpacity>
             </View>
-
-            <View style={styles.subContainer}>
-
-                <Text style={styles.subText}>Guide List</Text>
-
-                <View style={styles.ordersContainer}>
-                    <ScrollView horizontal={true}>
-                        <FlatList
-                            showsVerticalScrollIndicator={true}
-                            contentContainerStyle={{paddingBottom: 10}}
-                            data={cards}
-                            renderItem={({ item }) =>
-                                <OrderItem
-                                    name={item.name}
-                                    img={item.img}
-                                    location={item.location}
-                                />
-                            }
-                            keyExtractor={(item) => item.name}
-                            initialNumToRender={5}
-                        /> 
-                    </ScrollView>
-                </View>
-
+            <View style={styles.locationContainer}>
+                <FlatList
+                    contentContainerStyle={{padding:5}}
+                    removeClippedSubviews={true}
+                    data={data}
+                    renderItem={({item}) =>
+                        <LocationItem
+                            id={item.guide_id}
+                            name={item.guide_name}
+                            city={item.city}
+                            location={item.location_name}
+                            phone={item.phone}
+                            url={item.location_url}
+                        />
+                    }
+                    keyExtractor={(item) => item.guide_id}
+                    initialNumToRender={5}
+                />
             </View>
+        </View>
 
-        </SafeAreaView>
+    </SafeAreaView>
     )
 }
 
 export default Guide;
 
 const styles = StyleSheet.create({
-
     container: {
         flex : 1,
         backgroundColor : Colors.bgColor
     },
-    
-    headerText: {
-        borderRadius: 10,
-        borderColor: 'black',
-        borderWidth: 1,
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'white',
-        textAlign: 'center',
-        padding: 10,
-        backgroundColor : 'gray'
+
+    topView:{
+        flex : 2,
     },
 
-    BottomView: {
+    imageBg: {
+        flex: 0.3,
+        justifyContent: 'center',
+    },
+
+    imageContent: {
+        backgroundColor: 'rgba(0,0,0,.5)', 
+        flex:1,
+        padding: 30,
+        justifyContent: 'center'
+    },
+
+    bottomView: {
         flex: 3,
-        marginTop:-80,
-        // backgroundColor : 'red',
+        backgroundColor: 'white',
     },
 
-    formContainer: {
-        backgroundColor: Colors.fontColor2,
-        padding: 10,
-        borderRadius: 10,
-        marginVertical: 100,
-        marginHorizontal: 10,
-        elevation: 3,
+    searchContainer: {
+        backgroundColor: 'white',
         justifyContent: 'center',
-        alignItems: 'center'
+        flexDirection: 'row',
+        borderWidth: 2,
+        paddingLeft: 15,
+        margin: 10,
+        borderRadius: 15,
+        borderColor: Colors.mainColor2,
     },
 
-    textLabel : {
-        alignSelf : 'flex-start',
-        color: Colors.mainColor2,
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginTop: 15,
-        marginLeft: 10,
-    },
-
-    input: {
-        height: 50,
-        marginTop: 15,
-        borderWidth: 1,
-        borderColor : 'grey',
-        padding: 10,
-        color: 'black',
-        width: '95%',
-        borderRadius: 10,
-        backgroundColor: 'white'
-    },
-
-    card: {
-        borderRadius: 10,
-        borderColor: 'black',
-        borderWidth: 1,
-        marginLeft: 10,
-        width: 350,
+    locationContainer: {
+        flex: 6,
+        // backgroundColor: Colors.mainColor1,
+        paddingHorizontal: 10,
         justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: '18%'
     },
 
-    subContainer: {
+    textInput:{
+        flex:1
+    },
+
+    image : {
+        width : '50%',
+        height : '50%',
+        borderRadius : 15,
+        resizeMode: 'cover'
+    },
+    
+    textContainer : {
         flex : 1,
-        marginTop: -200,
-        backgroundColor : Colors.bgColor,
-        padding: 0,
-        align:'center',
+        alignItems : 'center',
+        flexDirection : 'row',
+        left: 20
     },
 
-    subText: {
-        marginTop: 20,
-        marginBottom: 20,
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: Colors.themeColor,
-        textAlign: 'center',
+    text : {
+        fontWeight : 'bold',
+        fontSize : 20,
+        color : Colors.fontColor1
     },
 
-    ordersContainer: {
-        // borderColor: 'black',
-        // borderWidth: 2,
-        height: '90%',
+    container1: {
+        width : '100%',
+        height : 220,
+        marginVertical : 10,
+        borderRadius : 15,
+        backgroundColor : '#FFF',
+        borderColor: '#000',
+        borderWidth: 0,
+        elevation:6,
+        paddingBottom: 10
     },
 
-    buttonContent: {
-        alignSelf : 'center',
-        marginTop: 30
+    simpletext : {
+        fontSize : 18,
+        color: Colors.fontColor1
     },
+
 
 });
