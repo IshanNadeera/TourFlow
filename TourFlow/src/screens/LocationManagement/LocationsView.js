@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {View, Text, StyleSheet, SafeAreaView, ImageBackground, Dimensions, TextInput, TouchableOpacity, Image, FlatList, TouchableNativeFeedback} from 'react-native'
 import Colors from "../../utils/Colors";
 import Lottie from 'lottie-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Location = ({navigation}) => {
@@ -11,6 +12,33 @@ const Location = ({navigation}) => {
     const closeIcon = require('../../../img/close.png');
 
     const [search, setSearch] = useState('');
+    const [user, setUser] = useState({});
+    const [username, setUsername] = useState('');
+    const [role, setRole] = useState('');
+    const [filteredData, setFilteredData] = useState([]);
+
+
+    useEffect(() => {
+        getUser();
+        setUsername(user.name);
+        setRole(user.name);
+        setFilteredData(data);
+    }, [])
+
+    useEffect(() => {
+        setUsername(user.name);
+        setRole(user.role);
+    },[user])
+
+    const getUser = async() => {
+        try {
+            const userValue = await AsyncStorage.getItem('User');
+            setUser(JSON.parse(userValue));
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const data = [
         {
@@ -75,13 +103,33 @@ const Location = ({navigation}) => {
         </TouchableNativeFeedback>
     );
 
+    const searchFilter = (text) => {
+        if(text){
+            const newData = data.filter((item) => {
+                const itemData = item.location_name ? item.location_name.toUpperCase() : ''.toUpperCase();
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > -1;
+            });
+            setFilteredData(newData);
+            setSearch(text);
+        }else{
+            setFilteredData(data);
+            setSearch(text);
+        }
+    }
+
+    const clearText = () => {
+        setSearch('');
+        setFilteredData(data);
+    }
+
     return(
         <SafeAreaView style={styles.container}>
 
             <View style={styles.topView}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.imageBg}>
                     <View style={styles.imageContent}>
-                        <Text style={{color:Colors.mainColor2, fontSize: 28, fontWeight:'bold'}}>Hi Ishan</Text>
+                        <Text style={{color:Colors.mainColor2, fontSize: 28, fontWeight:'bold'}}>Hi {username}</Text>
                         <Text style={{color:Colors.fontColor2, fontSize: 40, fontWeight:'bold'}}>Where do you want to go?</Text>
                     </View>
                 </ImageBackground>
@@ -94,8 +142,10 @@ const Location = ({navigation}) => {
                         placeholder="Search locations from here..."
                         keyboardType="default"
                         underlineColorAndroid="transparent"
+                        onChangeText={(text) => searchFilter(text)}
+                        value={search}
                     />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={ () => clearText()}>
                         <Image source= {search == '' ? searchIcon : closeIcon}
                             resizeMode='contain'
                             style={{
@@ -112,7 +162,7 @@ const Location = ({navigation}) => {
                     <FlatList
                         contentContainerStyle={{padding:5}}
                         removeClippedSubviews={true}
-                        data={data}
+                        data={filteredData}
                         renderItem={({item}) =>
                             <LocationItem
                                 id={item.location_id}
@@ -125,7 +175,7 @@ const Location = ({navigation}) => {
                         initialNumToRender={5}
                     />
 
-                    <TouchableOpacity
+                    {role == 'admin' ? <TouchableOpacity
                         onPress={ () => { onPressAdd() }}
                         style={{
                             width : 60,
@@ -144,7 +194,7 @@ const Location = ({navigation}) => {
                     
                         <Lottie style={{width: '100%'}} source={require('../../../img/add.json')} autoPlay loop />
 
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null }
 
                 </View>
             </View>
