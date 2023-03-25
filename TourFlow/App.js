@@ -12,7 +12,6 @@ import SingleCompany from './src/screens/TransportManagement/SingleCompany';
 import AddGuide from './src/screens/GuideManagement/AddGuide';
 import RestaurantAdd from './src/screens/RestaurantManagement/AddRestaurant';
 import RestaurantSingle from './src/screens/RestaurantManagement/SingleRestuarant';
-import RestaurantInitial from './src/screens/RestaurantManagement/RestaurantInitial';
 
 const Stack = createNativeStackNavigator();
 
@@ -91,11 +90,6 @@ const App = () => {
           options={{headerShown: false}}
         /> 
 
-        <Stack.Screen
-          name="RestaurantInitial"
-          component={RestaurantInitial}
-          options={{headerShown: false}}
-        /> 
       </Stack.Navigator>
     </NavigationContainer>
   );
