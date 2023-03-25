@@ -11,6 +11,8 @@ import AddTransport from './src/screens/TransportManagement/AddTransport';
 import SingleCompany from './src/screens/TransportManagement/SingleCompany';
 import AddGuide from './src/screens/GuideManagement/AddGuide';
 import RestaurantAdd from './src/screens/RestaurantManagement/AddRestaurant';
+import RestaurantSingle from './src/screens/RestaurantManagement/SingleRestuarant';
+import RestaurantHelp from './src/screens/RestaurantManagement/RestaurantHelp';
 
 const Stack = createNativeStackNavigator();
 
@@ -82,6 +84,19 @@ const App = () => {
           component={RestaurantAdd}
           options={{headerShown: false}}
         />
+
+        <Stack.Screen
+          name="RestaurantSingle"
+          component={RestaurantSingle}
+          options={{headerShown: false}}
+        />
+
+         <Stack.Screen
+          name="RestaurantHelp"
+          component={RestaurantHelp}
+          options={{headerShown: false}}
+        />  
+
       </Stack.Navigator>
     </NavigationContainer>
   );
