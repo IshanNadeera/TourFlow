@@ -72,6 +72,16 @@ const Login = ({ navigation }) => {
                         cancellable: false
                     });
                 }
+                else if (error.code === "auth/network-request-failed"){
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'Please check your internet connection',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false
+                    });
+                }
                 console.log(error.message);
             })
         }

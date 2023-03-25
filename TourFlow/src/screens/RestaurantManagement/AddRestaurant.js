@@ -17,13 +17,13 @@ import SweetAlert from 'react-native-sweet-alert';
 import {isEmpty} from 'lodash';
 import firestore from '@react-native-firebase/firestore';
 
-const LocationAdd = ({navigation}) => {
+const RestaurantAdd = ({navigation}) => {
   //Getters and Setters
   const [filePath, setFilePath] = useState({});
-  const [locationName, setLocationName] = useState('');
+  const [restaurantName, setRestaurantName] = useState('');
   const [city, setCity] = useState('');
   const [description, setDescription] = useState('');
-  const [district, setDistrict] = useState('');
+  const [hour, setHour] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   //Fire when user click select image
@@ -54,19 +54,11 @@ const LocationAdd = ({navigation}) => {
     });
   };
 
-  //Set districts
-  const districts = [
-    {name: 'Colombo'},
-    {name: 'Gampaha'},
-    {name: 'Kalutara'},
-    {name: 'Kandy'},
-    {name: 'Matale'},
-    {name: 'Nuwara Eliya'},
-    {name: 'Galle'},
-    {name: 'Matara'},
-    {name: 'Hambantota'},
-    {name: 'Jaffna'},
-    {name: 'Kilinochchi'},
+  //Set hours
+  const hours  = [
+    {name: '9am - 11pm'},
+    {name: '10am - 12pm'},
+    {name: '8am - 6pm'},
   ];
 
   const onPressClose = () => {
@@ -77,12 +69,12 @@ const LocationAdd = ({navigation}) => {
     setModalVisible(true);
   };
 
-  //Add locations to firebase
-  const onPressAddLocation = () => {
+  //Add restaurants to firebase
+  const onPressAddRestaurant = () => {
     if (
-      locationName == '' ||
+      restaurantName == '' ||
       city == '' ||
-      district == '' ||
+      hour == '' ||
       description == ''
     ) {
       SweetAlert.showAlertWithOptions({
@@ -106,23 +98,23 @@ const LocationAdd = ({navigation}) => {
       var id = 'id' + Math.random().toString(16).slice(2);
 
       firestore()
-        .collection('Locations')
+        .collection('Restaurants')
         .doc(id)
         .set({
-          location_id: id,
-          location_name: locationName,
-          location_city: city,
-          location_district: district,
-          location_description: description,
-          location_url: filePath.base64,
+          restaurant_id: id,
+          restaurant_name: restaurantName,
+          restaurant_city: city,
+          restaurant_hour: hour,
+          restaurant_description: description,
+          restaurant_url: filePath.base64,
         })
         .then(() => {
-          console.log('Location added!');
+          console.log('Restaurant added!');
 
           SweetAlert.showAlertWithOptions(
             {
               title: 'Success!',
-              subTitle: 'Location Added Successfully!',
+              subTitle: 'Restaurant Added Successfully!',
               confirmButtonTitle: 'OK',
               confirmButtonColor: 'green',
               style: 'success',
@@ -158,38 +150,38 @@ const LocationAdd = ({navigation}) => {
             fontFamily: 'sans-serif-condensed',
             marginBottom: 10,
           }}>
-          Add new location
+          Add new restaurant
         </Text>
       </View>
       <View style={styles.animation}>
         <Lottie
-          style={{width: '20%'}}
-          source={require('../../../img/map-pin-location.json')}
+          style={{width: '40%'}}
+          source={require('../../../img/cooking.json')}
           autoPlay
           loop
         />
       </View>
       <View style={styles.content}>
-        <Text style={styles.textLabel}>Location Name</Text>
+        <Text style={styles.textLabel}>Restaurant Name</Text>
         <TextInput
-          placeholder="Enter location name"
+          placeholder="Enter the restaurant name"
           style={styles.input}
-          onChangeText={location_name => setLocationName(location_name)}
+          onChangeText={restaurant_name => setRestaurantName(restaurant_name)}
         />
         <Text style={styles.textLabel}>City</Text>
         <TextInput
-          placeholder="Enter main city"
+          placeholder="Enter the nearest city"
           style={styles.input}
           onChangeText={city => setCity(city)}
         />
-        <Text style={styles.textLabelDropdown}>District</Text>
+        <Text style={styles.textLabelDropdown}>Open Hours</Text>
         <Dropdown
           placeholder="Select an option..."
-          options={districts}
+          options={hours}
           optionLabel={'name'}
           optionValue={'name'}
-          selectedValue={district}
-          onValueChange={value => setDistrict(value)}
+          selectedValue={hour}
+          onValueChange={value => setHour(value)}
           primaryColor={Colors.mainColor1}
           isSearchable={true}
           dropdownStyle={{borderColor: 'grey', backgroundColor: 'white'}}
@@ -208,7 +200,7 @@ const LocationAdd = ({navigation}) => {
           numberOfLines={5}
           style={styles.inputArea}
           onChangeText={description => setDescription(description)}
-          placeholder="Enter location breif description"
+          placeholder="Enter a breif description"
         />
       </View>
 
@@ -223,9 +215,9 @@ const LocationAdd = ({navigation}) => {
         <TouchableOpacity
           style={styles.button2}
           onPress={() => {
-            onPressAddLocation();
+            onPressAddRestaurant();
           }}>
-          <Text style={{color: '#fff', fontSize: 16}}>Add Location</Text>
+          <Text style={{color: '#fff', fontSize: 16}}>Add Restaurant</Text>
         </TouchableOpacity>
       </View>
 
@@ -293,7 +285,7 @@ const LocationAdd = ({navigation}) => {
   );
 };
 
-export default LocationAdd;
+export default RestaurantAdd;
 
 const styles = StyleSheet.create({
   container: {
