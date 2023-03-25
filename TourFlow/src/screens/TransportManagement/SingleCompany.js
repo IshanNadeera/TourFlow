@@ -4,6 +4,7 @@ import Colors from "../../utils/Colors";
 import Lottie from 'lottie-react-native';
 import Dropdown from 'react-native-input-select';
 import SweetAlert from 'react-native-sweet-alert';
+import firestore from '@react-native-firebase/firestore';
 
 const SingleCompany = ({ navigation, route }) => {
 
@@ -94,7 +95,7 @@ const SingleCompany = ({ navigation, route }) => {
             });
             return;
         }
-        if (!dis) {
+        if (!disNew) {
             SweetAlert.showAlertWithOptions({
                 subTitle: 'Discription required',
                 confirmButtonTitle: 'OK',
@@ -116,10 +117,15 @@ const SingleCompany = ({ navigation, route }) => {
         }
         firestore()
             .collection('Company')
-            .doc(locationId)
+            .doc(company_id)
             .update({
-                location_description: locationDescription,
-                location_url: newLocationUrl == '' ? locationUrl : newLocationUrl,
+                company_id: company_id,
+                company_name: companyNew,
+                city: cityNew,
+                number: mobileNew,
+                driver: nameNew,
+                province: provinceNew,
+                description: disNew,
             })
             .then(() => {
                 SweetAlert.showAlertWithOptions(
@@ -152,6 +158,36 @@ const SingleCompany = ({ navigation, route }) => {
 
 
     const handleSubmitDelete = () => {
+        firestore()
+            .collection('Company')
+            .doc(company_id)
+            .delete()
+            .then(() => {
+                SweetAlert.showAlertWithOptions(
+                    {
+                        title: 'Success!',
+                        subTitle: 'Company Deleted Successfully!',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'success',
+                        cancellable: false,
+                    },
+                    callback => navigation.navigate('Initial'),
+                );
+            })
+            .catch(error => {
+                console.log(error.code);
+                if (error.code === 'auth/network-request-failed') {
+                    SweetAlert.showAlertWithOptions({
+                        title: 'Error!',
+                        subTitle: 'Please check your internet connection',
+                        confirmButtonTitle: 'OK',
+                        confirmButtonColor: 'green',
+                        style: 'error',
+                        cancellable: false,
+                    });
+                }
+            });
         setModalVisible(false);
     }
 
