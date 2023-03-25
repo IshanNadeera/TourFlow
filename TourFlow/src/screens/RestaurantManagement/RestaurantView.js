@@ -77,7 +77,7 @@ const Restaurant = ({navigation}) => {
                     <Text style={styles.text}>{name}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Lottie style={{width: '10%', marginBottom: 10}} source={require('../../../img/calendar.json')} autoPlay loop />
+                    <Lottie style={{width: '10%', marginBottom: 4}} source={require('../../../img/calendar.json')} autoPlay loop />
                     <Text style={styles.simpletext}>{hour}</Text>
                 </View>
                 <Lottie   style={{
