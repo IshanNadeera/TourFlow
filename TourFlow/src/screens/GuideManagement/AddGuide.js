@@ -14,16 +14,16 @@ import Dropdown from 'react-native-input-select';
 import SweetAlert from 'react-native-sweet-alert';
 
 const AddGuide = ({ navigation }) => {
-    const [company, onChangeText] = React.useState('');
-    const [mobile, onChangeNumber] = React.useState('');
-    const [province, setProvince] = React.useState();
     const [name, onChangeName] = React.useState('');
+    const [mobile, onChangeNumber] = React.useState('');
+    const [age, onChangeAge] = React.useState();
+    const [location, onChangeLanguage] = React.useState('');
     const [city, onChangeCity] = React.useState('');
 
     const handleSubmit = () => {
-        if (!company) {
+        if (!name) {
             SweetAlert.showAlertWithOptions({
-                subTitle: 'Company name required',
+                subTitle: 'Guide name required',
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
@@ -54,7 +54,7 @@ const AddGuide = ({ navigation }) => {
 
         if (!name) {
             SweetAlert.showAlertWithOptions({
-                subTitle: 'Driver name required',
+                subTitle: 'Guide name required',
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
@@ -65,7 +65,7 @@ const AddGuide = ({ navigation }) => {
 
         if (!city) {
             SweetAlert.showAlertWithOptions({
-                subTitle: 'Company City required',
+                subTitle: 'City required',
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
@@ -74,9 +74,9 @@ const AddGuide = ({ navigation }) => {
             return;
         }
 
-        if (!province) {
+        if (!age) {
             SweetAlert.showAlertWithOptions({
-                subTitle: 'Province required',
+                subTitle: 'Age is required',
                 confirmButtonTitle: 'OK',
                 confirmButtonColor: 'green',
                 style: 'error',
@@ -106,14 +106,14 @@ const AddGuide = ({ navigation }) => {
                         fontWeight: 'bold',
                         color: Colors.mainColor2,
                         marginTop: 20,
-                        marginBottom: 5,
+                        marginBottom: 0,
                     }}>
                     Add Guide
                 </Text>
             </View>
             <Lottie
-                style={{ width: '75%' }}
-                source={require('../../../img/taxi.json')}
+                style={{ width: '60%', margin:10 }}
+                source={require('../../../img/addGuideAnim.json')}
                 autoPlay
                 loop
             />
@@ -130,12 +130,8 @@ const AddGuide = ({ navigation }) => {
                     top: 12,
                     left: 0,
                 }}>
-                <Lottie
-                    style={{ width: '100%' }}
-                    source={require('../../../img/backbutton.json')}
-                    autoPlay
-                    loop
-                />
+        <Lottie style={{width: '75%', left:5, top:3}} source={require('../../../img/backGuide.json')} autoPlay loop />
+
             </TouchableOpacity>
 
             <ScrollView style={styles.scrollView}>
@@ -154,60 +150,34 @@ const AddGuide = ({ navigation }) => {
 
                 <TextInput
                     style={styles.input}
-                    onChangeText={onChangeText}
-                    placeholder="Enter Company Name"
+                    onChangeText={onChangeName}
+                    placeholder="Enter Guide Name"
                     placeholderTextColor="#929292"
                 />
                 <TextInput
                     style={styles.input}
-                    onChangeText={onChangeNumber}
-                    placeholder="Enter Contact Number"
+                    onChangeText={onChangeAge}
+                    placeholder="Enter Age"
                     keyboardType="numeric"
                     placeholderTextColor="#929292"
                 />
                 <TextInput
                     style={styles.input}
-                    onChangeText={onChangeName}
-                    placeholder="Enter Driver Name"
+                    onChangeText={onChangeLanguage}
+                    placeholder="Enter Languages"
+                    placeholderTextColor="#929292"
+                />
+                <TextInput
+                    style={styles.input}
+                    onChangeText={onChangeNumber}
+                    placeholder="Enter Phone Number"
                     placeholderTextColor="#929292"
                 />
                 <TextInput
                     style={styles.input}
                     onChangeText={onChangeCity}
-                    placeholder="Enter Company City"
+                    placeholder="Enter City"
                     placeholderTextColor="#929292"
-                />
-                <Dropdown
-                    placeholder="Enter Your Province"
-                    options={[
-                        { name: 'Central Province', code: 'Central' },
-                        { name: 'Eastern Province', code: 'Eastern' },
-                        { name: 'North Central Province', code: 'North Central' },
-                        { name: 'Northern Province', code: 'Northern' },
-                        { name: 'North Western Province', code: 'North Western' },
-                        { name: 'Sabaragamuwa Province', code: 'Sabaragamuwa' },
-                        { name: 'Southern Province', code: 'Southern' },
-                        { name: 'Uva Province', code: 'Uva' },
-                        { name: 'Western Province', code: 'Western' },
-                    ]}
-                    optionLabel={'name'}
-                    optionValue={'code'}
-                    selectedValue={province}
-                    onValueChange={value => setProvince(value)}
-                    dropdownStyle={{
-                        width: '93%',
-                        margin: '3.5%',
-                        borderWidth: 1,
-                        borderColor: 'grey',
-                        borderRadius: 10,
-                        color: '#929292',
-                    }}
-                    dropdownContainerStyle={{
-                        color: '#929292',
-                        borderColor: 'grey',
-                    }}
-                    selectedItemStyle={{ color: Colors.fontColor1 }}
-                    primaryColor="#929292"
                 />
 
                 <View style={styles.buttonContent}>
@@ -240,6 +210,7 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         color: Colors.fontColor1,
         textAlign: 'left',
+        paddingLeft:10
     },
     scrollView: {
         flex: 1,
