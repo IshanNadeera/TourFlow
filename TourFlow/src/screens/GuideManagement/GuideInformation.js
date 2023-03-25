@@ -47,9 +47,9 @@ const GuideInformation = ({navigation, route}) => {
                     top: 10,
                     left: 10
                 }}>
-                    <Lottie style={{width: '100%', zIndex:10}} source={require('../../../img/back.json')} autoPlay loop />
-                    
-                {/* <Image source={backIcon} style={{ width : '100%', height : '100%',}}/> */}
+            
+            <Lottie style={{width: '100%', zIndex:10}} source={require('../../../img/back.json')} autoPlay loop />    
+            {/* <Image source={backIcon} style={{ width : '100%', height : '100%',}}/> */}
 
             </TouchableOpacity>
 
