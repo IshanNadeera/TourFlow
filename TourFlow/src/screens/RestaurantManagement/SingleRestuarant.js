@@ -264,7 +264,7 @@ const RestaurantSingle = ({navigation, route}) => {
               marginLeft: 10,
               fontFamily: 'sans-serif-condensed',
             }}>
-            {restaurantHour} District
+            {restaurantHour}
           </Text>
         </View>
 
