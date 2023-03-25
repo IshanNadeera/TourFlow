@@ -123,7 +123,7 @@ const Restaurant = ({navigation}) => {
             <View style={styles.topView}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.imageBg}>
                     <View style={styles.imageContent}>
-                    <Lottie  onPress={onPressHelp} style={{
+                    <Lottie  style={{
             width: '35%',
             alignSelf: 'flex-end',
             bottom: 55,
