@@ -1,85 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {TouchableNativeFeedback, FlatList, ImageBackground, View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image,  } from 'react-native'
 import Colors from "../../utils/Colors";
 import Lottie from 'lottie-react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import {useIsFocused} from '@react-navigation/native';
 
 const Guide = ({navigation}) => {
     const searchIcon = require('../../../img/search.png');
+    const isFocused = useIsFocused();
     const [search, setSearch] = useState('');
+    const [user, setUser] = useState({});
+    const [username, setUsername] = useState('');
+    const [role, setRole] = useState('');
+    const [filteredData, setFilteredData] = useState([]);
 
-    const data = [
-        {
-            'guide_id' : '1',
-            'location_name' : "Ella",
-            'city' : "Ella",
-            'guide_name' : 'Siriwardana',
-            'age':'30',
-            'language':'English',
-            'phone' : '0776738388',
-            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/c122dbf78d303f75cbe19005f0262a90'
-        },
-        {
-            'guide_id' : '2',
-            'location_name' : 'Lipton Seat',
-            'city' : "Lipton Seat",
-            'guide_name' : 'Siriwardana',
-            'age':'30',
-            'language':'English',
-            'phone' : '0776738388',
-            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/8231572242a18673640a51a3ac98eda5'
-        },
-        {
-            'guide_id' : '3',
-            'location_name' : 'Pidurangala',
-            'city' : "Pidurangala",
-            'guide_name' : 'Siriwardana',
-            'age':'30',
-            'language':'English',
-            'phone' : '0776738388',
-            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/974b01697f654849b4f2d24e869f0870'
-        },
-        {
-            'guide_id' : '4',
-            'location_name' : 'Sigiriya Rock Fortress',
-            'guide_name' : 'Siriwardana',
-            'city' : "Sigiriya",
-            'age':'30',
-            'language':'English',
-            'phone' : '0776738388',
-            'location_url' : 'https://destinationlesstravel.com/wp-content/uploads/2020/04/Depositphotos_88178998_XL-1024x683.jpg.webp'
-        },
-        {
-            'guide_id' : '5',
-            'location_name' : 'Fort Frederick',
-            'city' : "Galle",
-            'guide_name' : 'Siriwardana',
-            'age':'30',
-            'language':'English',
-            'phone' : '0776738388',
-            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/2ca4de4fc87d849e39772f6df4b612e4'
-        },
-        {
-            'guide_id' : '6',
-            'location_name' : 'Secret Beach',
-            'city' : "Unawatuna",
-            'guide_name' : 'Siriwardana',
-            'age':'30',
-            'language':'English',
-            'phone' : '0776738388',
-            'location_url' : 'https://withlocals-com-res.cloudinary.com/image/upload/w_450,h_300,c_fill,g_faces,q_auto,dpr_3.0,f_auto/8231572242a18673640a51a3ac98eda5'
+    //setup user details and location details
+    useEffect(() => {
+        getUser();
+        getLocations();
+
+        setUsername(user.name);
+        setRole(user.role);
+    }, [isFocused]);
+
+    useEffect(() => {
+        setUsername(user.name);
+        setRole(user.role);
+    }, [user]);
+
+    //Get location data from firebase
+  const getLocations = async () => {
+    var data = [];
+
+    firestore()
+      .collection('Guides')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          data.push(documentSnapshot.data());
+        });
+        setFilteredData(data);
+      });
+  };
+
+    //Get user data from firebase
+    const getUser = async () => {
+        try {
+          const userValue = await AsyncStorage.getItem('User');
+          setUser(JSON.parse(userValue));
+        } catch (error) {
+          console.log(error);
         }
-    ];
+    };
 
-    const onPressGuide = (id, name, city, url, location, phone, language, age) => {
+    const onPressGuide = (id, guide_name, city, guide_url, district, phone, language, age) => {
         navigation.navigate('GuideSingle', {
             id: id, 
-            name: name, 
+            guide_name: guide_name, 
             age:age,
             city: city, 
-            location:location, 
+            district:district, 
             phone:phone, 
-            url:url, 
+            guide_url:guide_url, 
             language:language
         });
     }
@@ -88,13 +71,14 @@ const Guide = ({navigation}) => {
         navigation.navigate('AddGuide');
     }
 
-    const LocationItem = ({ id, name, city, language, phone, url, age, location }) => (
-        <TouchableNativeFeedback onPress={ () => { onPressGuide(id, name, city, url, location, phone, language, age) }}>
+    const GuideItem = ({ id, guide_name, city, language, phone, guide_url, age, district }) => (
+        <TouchableNativeFeedback onPress={ () => { onPressGuide(id, guide_name, city, guide_url, district, phone, language, age) }}>
             <View style={styles.container1}>
                 <View style={styles.guideView}>
-                    <Image style={styles.image} src={url} />
+                    <Image style={styles.image} 
+                    source={{uri: 'data:image/png;base64,' + guide_url}} />
                 <View style={{left:10}}>
-                <Text style={{fontSize:15, fontWeight:'bold', fontSize:20}}>{name}</Text>
+                <Text style={{fontSize:15, fontWeight:'bold', fontSize:20}}>{guide_name}</Text>
                     <Text style={{fontSize:15}}>{language}</Text>
                     <Text style={{fontSize:15}}>{phone}</Text>
                     <Text style={{fontSize:15}}>age : {age}</Text>
@@ -111,6 +95,28 @@ const Guide = ({navigation}) => {
         </TouchableNativeFeedback>
     );
 
+    const searchFilter = text => {
+        if (text) {
+          const newData = data.filter(item => {
+            const itemData = item.guide_name
+              ? item.guide_name.toUpperCase()
+              : ''.toUpperCase();
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+          });
+          setFilteredData(newData);
+          setSearch(text);
+        } else {
+          setFilteredData(data);
+          setSearch(text);
+        }
+      };
+
+      const clearText = () => {
+        setSearch('');
+        setFilteredData(data);
+      };
+
     return(
         <SafeAreaView style={styles.container}>
 
@@ -122,7 +128,8 @@ const Guide = ({navigation}) => {
                 </View>
                 <Lottie style={{width: '100%'}} source={require('../../../img/guide.json')} autoPlay loop />
             </View>
-            <TouchableOpacity
+          {role == 'admin' ? (
+                    <TouchableOpacity
                         onPress={ () => { onPressAdd() }}
                         style={{
                             width : 70,
@@ -142,6 +149,7 @@ const Guide = ({navigation}) => {
                         <Lottie style={{width: '100%'}} source={require('../../../img/addGuide.json')} autoPlay loop />
 
                     </TouchableOpacity>
+                    ) : null }
         </View>
 
         <View style={styles.bottomView}>
@@ -151,6 +159,7 @@ const Guide = ({navigation}) => {
                     placeholder="Search location or Guide from here.."
                     keyboardType="default"
                     underlineColorAndroid="transparent"
+                    onChangeText={text => searchFilter(text)}
                 />
                 <TouchableOpacity>
                     <Image source= {search == '' ? searchIcon : closeIcon}
@@ -169,17 +178,17 @@ const Guide = ({navigation}) => {
                 <FlatList
                     contentContainerStyle={{padding:5}}
                     removeClippedSubviews={true}
-                    data={data}
+                    data={filteredData}
                     renderItem={({item}) =>
-                        <LocationItem
+                        <GuideItem
                             id={item.guide_id}
-                            name={item.guide_name}
+                            guide_name={item.guide_name}
                             city={item.city}
                             language={item.language}
                             phone={item.phone}
-                            url={item.location_url}
+                            guide_url={item.guide_url}
                             age={item.age}
-                            location={item.location_name}
+                            district={item.district}
                         />
                     }
                     keyExtractor={(item) => item.guide_id}
