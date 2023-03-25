@@ -112,13 +112,18 @@ const Restaurant = ({navigation}) => {
         setFilteredData(data);
     }
 
+    
+    const onPressHelp = () => {
+        navigation.navigate('RestaurantInitial');
+    };
+
     return(
         <SafeAreaView style={styles.container}>
 
             <View style={styles.topView}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.imageBg}>
                     <View style={styles.imageContent}>
-                    <Lottie   style={{
+                    <Lottie  onPress={onPressHelp} style={{
             width: '35%',
             alignSelf: 'flex-end',
             bottom: 55,
