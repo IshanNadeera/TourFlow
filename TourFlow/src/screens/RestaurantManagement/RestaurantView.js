@@ -118,6 +118,13 @@ const Restaurant = ({navigation}) => {
             <View style={styles.topView}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.imageBg}>
                     <View style={styles.imageContent}>
+                    <Lottie   style={{
+            width: '35%',
+            alignSelf: 'flex-end',
+            bottom: 55,
+            right:5,
+            position:"absolute"
+          }} source={require('../../../img/loading-dot.json')} autoPlay loop />
                         <Text style={{color:Colors.mainColor2, fontSize: 28, fontWeight:'bold'}}>Hi {username}</Text>
                         <Text style={{color:Colors.fontColor2, fontSize: 20, fontWeight:'bold'}}>Here are some of the best</Text>
                         <Text style={{color:Colors.fontColor2, fontSize: 26, fontWeight:'bold'}}>restuarants near you ....</Text>
