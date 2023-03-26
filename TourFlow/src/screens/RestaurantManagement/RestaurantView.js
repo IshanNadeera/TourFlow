@@ -22,6 +22,7 @@ const Restaurant = ({navigation}) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
     const [filteredData, setFilteredData] = useState([]);
+    const [allData, setAllData] = useState([]);
 
     useEffect(() => {
         getUser();
@@ -48,6 +49,7 @@ const Restaurant = ({navigation}) => {
                 data.push(documentSnapshot.data());
             });
             setFilteredData(data);
+            setAllData(data);
         });
     }
 
@@ -94,22 +96,22 @@ const Restaurant = ({navigation}) => {
 
     const searchFilter = (text) => {
         if(text){
-            const newData = data.filter((item) => {
-                const itemData = item.restaurant_name ? item.restaurant_name.toUpperCase() : ''.toUpperCase();
+            const newData = allData.filter((item) => {
+                const itemData = item.restaurant_city ? item.restaurant_city.toUpperCase() : ''.toUpperCase();
                 const textData = text.toUpperCase();
                 return itemData.indexOf(textData) > -1;
             });
             setFilteredData(newData);
             setSearch(text);
         }else{
-            setFilteredData(data);
+            setFilteredData(allData);
             setSearch(text);
         }
     }
 
     const clearText = () => {
         setSearch('');
-        setFilteredData(data);
+        setFilteredData(allData);
     }
 
     
@@ -146,7 +148,7 @@ const Restaurant = ({navigation}) => {
                 <View style={styles.searchContainer}>
                     <TextInput
                         style={styles.textInput}
-                        placeholder="Search Restaurants from here..."
+                        placeholder="Search Restaurants from city here..."
                         keyboardType="default"
                         underlineColorAndroid="transparent"
                         onChangeText={(text) => searchFilter(text)}
