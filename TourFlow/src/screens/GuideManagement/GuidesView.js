@@ -8,6 +8,7 @@ import {useIsFocused} from '@react-navigation/native';
 
 const Guide = ({navigation}) => {
     const searchIcon = require('../../../img/search.png');
+    const closeIcon = require('../../../img/close.png');
     const isFocused = useIsFocused();
     const [search, setSearch] = useState('');
     const [user, setUser] = useState({});
@@ -162,8 +163,9 @@ const Guide = ({navigation}) => {
                     keyboardType="default"
                     underlineColorAndroid="transparent"
                     onChangeText={text => searchFilter(text)}
+                    value={search}
                 />
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => clearText()}>
                     <Image source= {search == '' ? searchIcon : closeIcon}
                         resizeMode='contain'
                         style={{
