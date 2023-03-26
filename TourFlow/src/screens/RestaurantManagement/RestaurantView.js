@@ -77,7 +77,7 @@ const Restaurant = ({navigation}) => {
                     <Text style={styles.text}>{name}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Lottie style={{width: '10%', marginBottom: 10}} source={require('../../../img/calendar.json')} autoPlay loop />
+                    <Lottie style={{width: '10%', marginBottom: 4}} source={require('../../../img/calendar.json')} autoPlay loop />
                     <Text style={styles.simpletext}>{hour}</Text>
                 </View>
                 <Lottie   style={{
@@ -112,12 +112,29 @@ const Restaurant = ({navigation}) => {
         setFilteredData(data);
     }
 
+    
+    const onPressHelp = () => {
+        navigation.navigate('RestaurantHelp');
+    };
+
     return(
         <SafeAreaView style={styles.container}>
 
             <View style={styles.topView}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.imageBg}>
                     <View style={styles.imageContent}>
+                    <TouchableOpacity
+              onPress={() => {
+                onPressHelp();
+              }}
+             ><Lottie  style={{
+            width: '35%',
+            alignSelf: 'flex-end',
+            bottom: -20,
+            right:0,
+            position:"absolute"
+          }} source={require('../../../img/loading-dot.json')} autoPlay loop />
+          </TouchableOpacity>
                         <Text style={{color:Colors.mainColor2, fontSize: 28, fontWeight:'bold'}}>Hi {username}</Text>
                         <Text style={{color:Colors.fontColor2, fontSize: 20, fontWeight:'bold'}}>Here are some of the best</Text>
                         <Text style={{color:Colors.fontColor2, fontSize: 26, fontWeight:'bold'}}>restuarants near you ....</Text>

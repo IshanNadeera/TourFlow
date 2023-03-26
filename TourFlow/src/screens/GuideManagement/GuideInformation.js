@@ -2,24 +2,27 @@ import React, { useState } from "react";
 import {View, Text, StyleSheet, SafeAreaView, ImageBackground, Dimensions, TextInput, TouchableOpacity, Image, FlatList, TouchableNativeFeedback, Modal} from 'react-native'
 import Colors from "../../utils/Colors";
 import Lottie from 'lottie-react-native';
+import SweetAlert from 'react-native-sweet-alert';
+import firestore from '@react-native-firebase/firestore';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const GuideInformation = ({navigation, route}) => {
 
-    const location_id = route.params.id;
-    const guide_name = route.params.name;
-    const city = route.params.city;
-    const location_url = route.params.url;
-    const location = route.params.location;
-    const guide_phone = route.params.phone;
-    const guide_language = route.params.language;
-    const age = route.params.age;
+    const [guideId, setGuideId] = useState(route.params.id);
+    const [guide_name, setGuideName] = useState(route.params.guide_name);
+    const [city, setCity] = useState(route.params.city);
+    const [guide_url, setGuideUrl] = useState(route.params.guide_url);
+    const [district, setDistrict] = useState(route.params.district);
+    const [phone, setPhone] = useState(route.params.phone);
+    const [language, setLanguage] = useState(route.params.language);
+    const [age, setAge] = useState(route.params.age);
 
-
-    const image = location_url;
+    const image = guide_url;
     const backIcon = require('../../../img/backImage.jpg');
     const navigtionIcon = require('../../../img/navigation.png');
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [newGuideUrl, setNewGuideUrl] = useState('');
 
     const onPressBack = () => {
         navigation.navigate('Guide')
@@ -32,6 +35,176 @@ const GuideInformation = ({navigation, route}) => {
     const onPressClose = () => {
         setModalVisible(false);
     }
+
+  //Fire when user click select image
+  const chooseFile = type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('The user closed the camera selector.');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        alert('No camera is present on the device.');
+        return;
+      } else if (response.errorCode == 'permission') {
+        alert('Permission not granted');
+        return;
+      } else if (response.errorCode == 'others') {
+        alert(response.errorMessage);
+        return;
+      }
+
+      setNewGuideUrl(response.assets[0].base64);
+    });
+  };
+
+  const onPressDelete = () => {
+    SweetAlert.showAlertWithOptions(
+      {
+        title: 'Do you want to Delete?',
+        subTitle: "This can't be undone",
+        confirmButtonTitle: 'Ok',
+        confirmButtonColor: 'green',
+        style: 'warning',
+        cancellable: true,
+      },
+      callback => deleteData(),
+    );
+  };
+
+  const onPressUpdate = () => {
+    if (guide_name == '') {
+      SweetAlert.showAlertWithOptions({
+        title: 'Error!',
+        subTitle: 'Input fields cannot be empty',
+        confirmButtonTitle: 'OK',
+        confirmButtonColor: 'green',
+        style: 'error',
+        cancellable: false,
+      });
+    }  else if (phone == '') {
+        SweetAlert.showAlertWithOptions({
+          title: 'Error!',
+          subTitle: 'Input fields cannot be empty',
+          confirmButtonTitle: 'OK',
+          confirmButtonColor: 'green',
+          style: 'error',
+          cancellable: false,
+        });
+      } else if (language == '') {
+        SweetAlert.showAlertWithOptions({
+          title: 'Error!',
+          subTitle: 'Input fields cannot be empty',
+          confirmButtonTitle: 'OK',
+          confirmButtonColor: 'green',
+          style: 'error',
+          cancellable: false,
+        });
+      } else if (age == '') {
+        SweetAlert.showAlertWithOptions({
+          title: 'Error!',
+          subTitle: 'Input fields cannot be empty',
+          confirmButtonTitle: 'OK',
+          confirmButtonColor: 'green',
+          style: 'error',
+          cancellable: false,
+        });
+      } else {
+      SweetAlert.showAlertWithOptions(
+        {
+          title: 'Do you want to Update?',
+          subTitle: "This can't be undone",
+          confirmButtonTitle: 'Ok',
+          confirmButtonColor: 'green',
+          style: 'warning',
+          cancellable: true,
+        },
+        callback => updateData(),
+      );
+    }
+  };
+
+    //Update firebase data
+    const updateData = () => {
+        firestore()
+          .collection('Guides')
+          .doc(guideId)
+          .update({
+            guide_name: guide_name,
+            age: age,
+            language:language,
+            phone:phone,
+            guide_url: newGuideUrl == '' ? guide_url : newGuideUrl,
+          })
+          .then(() => {
+            SweetAlert.showAlertWithOptions(
+              {
+                title: 'Success!',
+                subTitle: 'Details Added Successfully!',
+                confirmButtonTitle: 'OK',
+                confirmButtonColor: 'green',
+                style: 'success',
+                cancellable: false,
+              },
+              callback => navigation.navigate('Initial'),
+            );
+          })
+          .catch(error => {
+            console.log(error.code);
+            if (error.code === 'auth/network-request-failed') {
+              SweetAlert.showAlertWithOptions({
+                title: 'Error!',
+                subTitle: 'Please check your internet connection',
+                confirmButtonTitle: 'OK',
+                confirmButtonColor: 'green',
+                style: 'error',
+                cancellable: false,
+              });
+            }
+          });
+      };
+
+
+  //Delete firebase data
+  const deleteData = () => {
+    console.log('delete');
+    firestore()
+      .collection('Guides')
+      .doc(guideId)
+      .delete()
+      .then(() => {
+        SweetAlert.showAlertWithOptions(
+          {
+            title: 'Success!',
+            subTitle: 'Location Deleted Successfully!',
+            confirmButtonTitle: 'OK',
+            confirmButtonColor: 'green',
+            style: 'success',
+            cancellable: false,
+          },
+          callback => navigation.navigate('Initial'),
+        );
+      })
+      .catch(error => {
+        console.log(error.code);
+        if (error.code === 'auth/network-request-failed') {
+          SweetAlert.showAlertWithOptions({
+            title: 'Error!',
+            subTitle: 'Please check your internet connection',
+            confirmButtonTitle: 'OK',
+            confirmButtonColor: 'green',
+            style: 'error',
+            cancellable: false,
+          });
+        }
+      });
+  };
 
     return(
         <SafeAreaView style={styles.container}>
@@ -47,22 +220,22 @@ const GuideInformation = ({navigation, route}) => {
                     top: 10,
                     left: 10
                 }}>
-                    <Lottie style={{width: '100%', zIndex:10}} source={require('../../../img/back.json')} autoPlay loop />
-                    
-                {/* <Image source={backIcon} style={{ width : '100%', height : '100%',}}/> */}
+            
+            <Lottie style={{width: '100%', zIndex:10}} source={require('../../../img/back.json')} autoPlay loop />    
 
             </TouchableOpacity>
 
             <View style={styles.topSection}>
-                <ImageBackground src={image} resizeMode="cover" style={styles.image}>
-                    
-                </ImageBackground>
+                <ImageBackground
+                    source={{uri: 'data:image/png;base64,' + guide_url}} 
+                    resizeMode="cover" 
+                    style={styles.image}></ImageBackground>
             </View>
             <View style={styles.bottomSection}>
 
                 <View style={styles.details}>
                     <Lottie style={{width: '10%', bottom: 5}} source={require('../../../img/location-loading.json')} autoPlay loop />
-                    <Text style={{fontSize: 18, color:Colors.fontColor1, fontFamily: 'sans-serif-condensed'}}>{location}</Text>
+                    <Text style={{fontSize: 18, color:Colors.fontColor1, fontFamily: 'sans-serif-condensed'}}>{district}</Text>
                     <Image source={navigtionIcon} style={{ width : 25, height : 25, tintColor: Colors.mainColor3, marginLeft:20}}/>
                     <Text style={{fontSize: 18, color:Colors.fontColor1, marginLeft:10, fontFamily: 'sans-serif-condensed'}}>{city}</Text>
                 </View>
@@ -80,10 +253,10 @@ const GuideInformation = ({navigation, route}) => {
                             Age: {age}
                         </Text>
                         <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
-                            Language: {guide_language}
+                            Language: {language}
                         </Text>
                         <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
-                            Phone: {guide_phone}
+                            Phone: {phone}
                         </Text>
                     </View>
                 </View>
@@ -119,45 +292,68 @@ const GuideInformation = ({navigation, route}) => {
                     <View style={styles.modalView}>
                         <Text style={{fontSize:26, color:Colors.fontColor1, fontWeight: 'bold', fontFamily: 'sans-serif-condensed', marginBottom: 10}}>Edit Info</Text>
 
-                        <Lottie style={{width: '20%'}} source={require('../../../img/map-pin-location.json')} autoPlay loop />
+                        <TouchableOpacity onPress={() => chooseFile('photo')}>
+                            <View style={styles.uploadContainer}>
+                                {newGuideUrl == '' ? (
+                                <Image
+                                    source={{uri: 'data:image/png;base64,' + guide_url}}
+                                    style={styles.imageStyle}
+                                />
+                                ) : (
+                                <Image
+                                    source={{uri: 'data:image/png;base64,' + newGuideUrl}}
+                                    style={styles.imageStyle}
+                                />
+                                )}
+                            </View>
+                        </TouchableOpacity>
 
-                        <Text style={styles.textLabel}>Location Name</Text>
-                        <TextInput
-                            defaultValue={location}
-                            style={styles.input}
-                        />
-                        <Text style={styles.textLabel}>City</Text>
-                        <TextInput
-                            defaultValue={city}
-                            style={styles.input}
-                        />
                         <Text style={styles.textLabel}>Name</Text>
                         <TextInput
                             defaultValue={guide_name}
                             style={styles.input}
+                            onChangeText={guide_name => setGuideName(guide_name)}
                         />
-                        <Text style={styles.textLabel}>Language</Text>
-                        <TextInput
-                            defaultValue={guide_language}
-                            style={styles.input}
-                        />
+
                         <Text style={styles.textLabel}>Age</Text>
                         <TextInput
                             defaultValue={age}
                             style={styles.input}
-                        />
-                        <Text style={styles.textLabel}>Phone</Text>
-                        <TextInput
-                            defaultValue={guide_phone}
-                            style={styles.input}
+                            onChangeText={age => setAge(age)}
                         />
 
+                        <Text style={styles.textLabel}>Language</Text>
+                        <TextInput
+                            defaultValue={language}
+                            style={styles.input}
+                            onChangeText={language => setLanguage(language)}
+                        />
+
+                        <Text style={styles.textLabel}>Phone</Text>
+                        <TextInput
+                            defaultValue={phone}
+                            style={styles.input}
+                            onChangeText={phone => setPhone(phone)}
+                        />
+
+                        {/* <Text style={styles.textLabel}>City</Text>
+                        <TextInput
+                            defaultValue={city}
+                            style={styles.input}
+                        /> */}
+
                         <View style={styles.buttonContent}>
-                            <TouchableOpacity style={styles.button}>
+                            <TouchableOpacity style={styles.button}
+                                onPress={() => {
+                                    onPressUpdate();
+                                }}>
                                 <Text style={{color: '#fff', fontSize: 16}}>Update</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.button2}>
-                                <Text style={{color: '#fff', fontSize: 16}}>Delete</Text>
+                                <Text style={{color: '#fff', fontSize: 16}}
+                                onPress={() => {
+                                    onPressDelete();
+                                }}>Delete</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -302,5 +498,24 @@ const styles = StyleSheet.create({
         justifyContent : 'center',
         marginHorizontal: 10
     },
+
+    uploadContainer: {
+        marginTop: '5%',
+        marginBottom: '5%',
+        height: 200,
+        width: 200,
+        borderWidth: 2,
+        borderStyle: 'dashed',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    imageStyle: {
+        width: 185,
+        height: 185,
+        margin: 5,
+        resizeMode: 'cover',
+      },
 
 })
