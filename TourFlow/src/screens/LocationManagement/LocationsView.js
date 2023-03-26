@@ -5,7 +5,6 @@ import {
   StyleSheet,
   SafeAreaView,
   ImageBackground,
-  Dimensions,
   TextInput,
   TouchableOpacity,
   Image,
@@ -33,6 +32,7 @@ const Location = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [allData, setAllData] = useState([]);
 
   //setup user details and location details
   useEffect(() => {
@@ -60,6 +60,7 @@ const Location = ({navigation}) => {
           data.push(documentSnapshot.data());
         });
         setFilteredData(data);
+        setAllData(data);
       });
   };
 
@@ -128,7 +129,7 @@ const Location = ({navigation}) => {
 
   const searchFilter = text => {
     if (text) {
-      const newData = data.filter(item => {
+      const newData = allData.filter(item => {
         const itemData = item.location_name
           ? item.location_name.toUpperCase()
           : ''.toUpperCase();
@@ -138,14 +139,14 @@ const Location = ({navigation}) => {
       setFilteredData(newData);
       setSearch(text);
     } else {
-      setFilteredData(data);
+      setFilteredData(allData);
       setSearch(text);
     }
   };
 
   const clearText = () => {
     setSearch('');
-    setFilteredData(data);
+    setFilteredData(allData);
   };
 
   return (
