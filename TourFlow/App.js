@@ -13,6 +13,14 @@ import AddGuide from './src/screens/GuideManagement/AddGuide';
 import RestaurantAdd from './src/screens/RestaurantManagement/AddRestaurant';
 import RestaurantSingle from './src/screens/RestaurantManagement/SingleRestuarant';
 import RestaurantHelp from './src/screens/RestaurantManagement/RestaurantHelp';
+import { LogBox } from 'react-native';
+
+// Ignore log notification by message
+LogBox.ignoreLogs(['Warning: ...']);
+
+//Ignore all log notifications
+LogBox.ignoreAllLogs();
+
 
 const Stack = createNativeStackNavigator();
 
