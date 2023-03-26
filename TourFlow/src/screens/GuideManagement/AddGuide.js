@@ -28,7 +28,7 @@ const AddGuide = ({ navigation }) => {
     const [district, setDistrict] = React.useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
-      //Fire when user click select image
+  //Fire when user click select image
   const chooseFile = type => {
     let options = {
       mediaType: type,
