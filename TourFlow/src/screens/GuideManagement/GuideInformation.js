@@ -8,16 +8,14 @@ import {launchImageLibrary} from 'react-native-image-picker';
 
 const GuideInformation = ({navigation, route}) => {
 
-    const guideId = route.params.id;
-    const guide_name = route.params.guide_name;
-    const city = route.params.city;
-    // const guide_url = route.params.guide_url;
-  const [guide_url, setGuideUrl] = useState(route.params.guide_url);
-    const district = route.params.district;
-    const phone = route.params.phone;
-    const guide_language = route.params.language;
-    const age = route.params.age;
-
+    const [guideId, setGuideId] = useState(route.params.id);
+    const [guide_name, setGuideName] = useState(route.params.guide_name);
+    const [city, setCity] = useState(route.params.city);
+    const [guide_url, setGuideUrl] = useState(route.params.guide_url);
+    const [district, setDistrict] = useState(route.params.district);
+    const [phone, setPhone] = useState(route.params.phone);
+    const [language, setLanguage] = useState(route.params.language);
+    const [age, setAge] = useState(route.params.age);
 
     const image = guide_url;
     const backIcon = require('../../../img/backImage.jpg');
@@ -38,7 +36,7 @@ const GuideInformation = ({navigation, route}) => {
         setModalVisible(false);
     }
 
-      //Fire when user click select image
+  //Fire when user click select image
   const chooseFile = type => {
     let options = {
       mediaType: type,
@@ -99,7 +97,7 @@ const GuideInformation = ({navigation, route}) => {
           style: 'error',
           cancellable: false,
         });
-      } else if (guide_language == '') {
+      } else if (language == '') {
         SweetAlert.showAlertWithOptions({
           title: 'Error!',
           subTitle: 'Input fields cannot be empty',
@@ -139,6 +137,9 @@ const GuideInformation = ({navigation, route}) => {
           .doc(guideId)
           .update({
             guide_name: guide_name,
+            age: age,
+            language:language,
+            phone:phone,
             guide_url: newGuideUrl == '' ? guide_url : newGuideUrl,
           })
           .then(() => {
@@ -170,7 +171,7 @@ const GuideInformation = ({navigation, route}) => {
       };
 
 
-        //Delete firebase data
+  //Delete firebase data
   const deleteData = () => {
     console.log('delete');
     firestore()
@@ -221,7 +222,6 @@ const GuideInformation = ({navigation, route}) => {
                 }}>
             
             <Lottie style={{width: '100%', zIndex:10}} source={require('../../../img/back.json')} autoPlay loop />    
-            {/* <Image source={backIcon} style={{ width : '100%', height : '100%',}}/> */}
 
             </TouchableOpacity>
 
@@ -253,7 +253,7 @@ const GuideInformation = ({navigation, route}) => {
                             Age: {age}
                         </Text>
                         <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
-                            Language: {guide_language}
+                            Language: {language}
                         </Text>
                         <Text style={{fontSize: 18, color:Colors.fontColor1, textAlign: 'justify', lineHeight: 27, fontFamily: 'sans-serif-condensed'}}>
                             Phone: {phone}
@@ -312,24 +312,28 @@ const GuideInformation = ({navigation, route}) => {
                         <TextInput
                             defaultValue={guide_name}
                             style={styles.input}
+                            onChangeText={guide_name => setGuideName(guide_name)}
                         />
 
                         <Text style={styles.textLabel}>Age</Text>
                         <TextInput
                             defaultValue={age}
                             style={styles.input}
+                            onChangeText={age => setAge(age)}
                         />
 
                         <Text style={styles.textLabel}>Language</Text>
                         <TextInput
-                            defaultValue={guide_language}
+                            defaultValue={language}
                             style={styles.input}
+                            onChangeText={language => setLanguage(language)}
                         />
 
                         <Text style={styles.textLabel}>Phone</Text>
                         <TextInput
                             defaultValue={phone}
                             style={styles.input}
+                            onChangeText={phone => setPhone(phone)}
                         />
 
                         {/* <Text style={styles.textLabel}>City</Text>
